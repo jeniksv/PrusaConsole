@@ -4,6 +4,7 @@
 #include <map>
 #include <functional>
 
+
 void setNonCanonicalMode() {
     struct termios term;
     tcgetattr(STDIN_FILENO, &term);
