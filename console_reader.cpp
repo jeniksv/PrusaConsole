@@ -8,3 +8,12 @@
 // result should look like console reader with method readline(); readchar();
 //
 // well a lot of method like leftArrow detected, tab_detected, tabtab_detected
+//
+// console_reader{
+// public:
+// 	std::string read_line(){
+// 		
+// 	}
+// private:
+// 	current_line
+// };
