@@ -36,6 +36,62 @@ void BackspaceAction() {
     std::cout << "\b \b"; // Move cursor left, erase character, move cursor left
 }
 
+// key actions:
+// ENTER \n
+// BACKSPACE
+// TAB
+// ARROW KEY
+// normal should write it to console
+enum class key_actions {ENTER, BACKSPACE, TAB, ARROW_KEY, ESCAPE, NORMAL}
+
+// THIS should have ptr to console_reader actions
+class key_action{
+public:
+	key_action();
+
+	virtual ~key_action();
+	virtual void execute();
+private:
+	std::shared_ptr<console_reader> idk;
+};
+
+class enter_action : public key_action{
+public:
+	void execute() override {
+		// should end completion
+	}
+};
+
+class backspace_action : public key_action{
+public:
+	void execute() override {
+		std::cout << "\b \b";
+	}
+};
+
+class arrow_key_action : public key_action{
+public:
+	void execute() override {
+		if(UP){
+			history.move_next();
+			// rewrite string in console
+		}
+
+		else if(DOWN){
+			history.move_back();
+			// rewrite string in console
+		}
+
+		else if(LEFT){
+			// move current index in string by one left
+		}
+
+		else if(RIGHT){
+			
+		}
+	}
+};
+
 int main() {
     setNonCanonicalMode();
     char ch;

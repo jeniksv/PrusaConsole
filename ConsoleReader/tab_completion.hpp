@@ -4,15 +4,21 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <algorithm>
+#include <filesystem>
+
+#include "command.hpp"
 
 // TODO more complex -> each command should have specified aruments, which can be completed
 class tab_completion {
 public:
-        tab_completion(const std::set<std::string>& commands);
+	tab_completion(const std::set<std::string>& commands);
 
-        void add_command(const std::string& name);
+        tab_completion(const std::set<command, command_comparator>& commands);
 
-	void remove_command(const std::string& name);
+        void add_command(const command& name);
+
+	void remove_command(const command& name);
 
         // returns longest common prefix
 	// TODO these should be private and there should be one method ehich will decide if you are trying to
@@ -28,7 +34,7 @@ private:
 
         std::string longest_common_prefix(const std::vector<std::string>& commands);
 
-        std::set<std::string> _commands;
+        std::set<command, command_comparator> _commands;
 };
 
 #endif
