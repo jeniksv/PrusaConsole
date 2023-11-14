@@ -1,36 +1,27 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Iinclude
+CFLAGS = -Wall -std=c++20
 
-SRC_DIR = src
-INCLUDE_DIR = include
-TEST_DIR = tests
-BUILD_DIR = build
-BIN_DIR = bin
+TARGET = prusa-console
+SRCDIR = src
+INCDIR = include
+BUILDDIR = build
 
-EXECUTABLE = $(BIN_DIR)/app
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
-OBJECTS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SOURCES))
-TEST_SOURCES = $(wildcard $(TEST_DIR)/*.cpp)
-TEST_EXECUTABLES = $(patsubst $(TEST_DIR)/%.cpp,$(BIN_DIR)/%,$(TEST_SOURCES))
+SOURCES = $(wildcard $(SRCDIR)/*.cpp)
+OBJECTS = $(SOURCES:$(SRCDIR)/%.cpp=$(BUILDDIR)/%.o)
+DEPS = $(OBJECTS:.o=.d)
+INCLUDES = -I$(INCDIR)
 
-all: $(EXECUTABLE) tests
+$(TARGET): $(OBJECTS)
+	$(CXX) $(CFLAGS) $(INCLUDES) $^ -o $@
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
-    @mkdir -p $(@D)
-    $(CXX) $(CXXFLAGS) -c $< -o $@
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
+	mkdir -p $(BUILDDIR)
+	$(CC) $(CFLAGS) $(INCLUDES) -MMD -c $< -o $@
 
-$(EXECUTABLE): $(OBJECTS)
-    @mkdir -p $(BIN_DIR)
-    $(CXX) $(CXXFLAGS) $^ -o $@
+-include $(DEPS)
 
-tests: $(TEST_EXECUTABLES)
-
-$(BIN_DIR)/%: $(TEST_DIR)/%.cpp $(filter-out $(BUILD_DIR)/main.o,$(OBJECTS))
-    @mkdir -p $(BIN_DIR)
-    $(CXX) $(CXXFLAGS) $^ -o $@
+.PHONY: clean
 
 clean:
-    @rm -rf $(BUILD_DIR) $(BIN_DIR)
-
-.PHONY: all clean
+	rm -rf $(BUILDDIR) $(TARGET)
 

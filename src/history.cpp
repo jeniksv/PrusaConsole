@@ -59,18 +59,3 @@ std::string history::get_current() {
 
 	return _current_commands[_current_index]; 
 }
-
-
-int main(){
-	history h(".console_reader_history");
-	
-	h.add("ahoj");
-	h.add("jak");
-	h.add("se");
-	h.add("mas");
-
-	for(int i=0; i < 10; ++i){
-		std::cout << h.get_current() << std::endl;
-		h.move_back();
-	}
-}

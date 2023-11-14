@@ -1,5 +1,6 @@
 #include "tab_completion.hpp"
 
+#include <filesystem>
 #include <iostream>
 // TODO use stringstream instead of std::string
 
@@ -50,7 +51,7 @@ std::string tab_completion::longest_common_prefix(const std::vector<std::string>
 	std::string last = *(commands.end() - 1);
 	std::string result;
 
-	for(int i=0; i < std::min(first.length(), last.length()); i++){
+	for(unsigned int i=0; i < std::min(first.length(), last.length()); i++){
 		if(first[i] != last[i]){
 			break;
 		}
