@@ -25,5 +25,5 @@ int main(){
 
 	// for(auto& i : r) std::cout << i << std::endl;
 	std::cout << t.get_path_match("/home/jenda/Dow") << std::endl;
-	std::cout << t.get_path_match("tab") << std::endl;
+	std::cout << t.get_path_match("s") << std::endl;
 } 
