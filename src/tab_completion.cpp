@@ -17,6 +17,10 @@ void tab_completion::add_command(const command& command){
 	_commands.insert(command);
 }
 
+void tab_completion::remove_command(const command& command){
+	_commands.erase(command);
+}
+
 std::vector<std::string> tab_completion::get_command_matches(const std::string& prefix){
 	return get_commands_subset(prefix);
 }

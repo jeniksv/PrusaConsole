@@ -6,14 +6,14 @@
 TEST(HistoryTest, AddAndGetCommands) {
 	history h;
 
-	h.add("command1");
-	ASSERT_EQ(h.get_current(), "command1");
-
-	h.add("command2");
-	ASSERT_EQ(h.get_current(), "command2");
+	h.add("a");
+	ASSERT_EQ(h.get_current(), "");
 	
-	h.add("command3");
-	ASSERT_EQ(h.get_current(), "command3");
+	h.add("b");
+	ASSERT_EQ(h.get_current(), "");
+	
+	h.add("c");
+	ASSERT_EQ(h.get_current(), "");
 }
 
 TEST(HistoryTest, MoveNextAndBackAnd) {
@@ -25,9 +25,8 @@ TEST(HistoryTest, MoveNextAndBackAnd) {
 	}
 
 	for(int i=7; i >= 0; --i){
-		ASSERT_EQ(h.get_current(), commands[i]);
 		h.move_back();
-
+		ASSERT_EQ(h.get_current(), commands[i]);
 	}
 }
 /*

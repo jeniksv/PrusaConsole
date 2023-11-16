@@ -1,5 +1,6 @@
 CXX = g++
 CFLAGS = -Wall -std=c++20
+LIBS = -lgtest -lgtest_main -lpthread
 
 TARGET = prusa-console
 TEST_TARGET = test_runner
@@ -10,37 +11,38 @@ BUILDDIR = build/app
 TEST_BUILDDIR = build/tests
 
 SOURCES = $(wildcard $(SRCDIR)/*.cpp)
-TEST_SOURCES = $(wildcard $(TESTDIR)/*.cpp)
 OBJECTS = $(SOURCES:$(SRCDIR)/%.cpp=$(BUILDDIR)/%.o)
-TEST_OBJECTS = $(TEST_SOURCES:$(TESTDIR)/%.cpp=$(TEST_BUILDDIR)/%.o)
 DEPS = $(OBJECTS:.o=.d)
-TEST_DEPS = $(TEST_OBJECTS:.o=.d)
-INCLUDES = -I$(INCDIR)
+INCLUDES = -I $(INCDIR)
 
-.PHONY: clean test
+TEST_SOURCES = $(wildcard $(TESTDIR)/*.cpp)
+TEST_OBJECTS = $(TEST_SOURCES:$(TESTDIR)/%.cpp=$(TEST_BUILDDIR)/%.o)
+TEST_DEPS = $(TEST_OBJECTS:.o=.d)
+TEST_INCLUDES = -I$(INCDIR) -I/usr/src/googletest/googletest/include/
+
+.PHONY: all clean test
+
+all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	$(CXX) $(CFLAGS) $(INCLUDES) $^ -o $@
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
-	@mkdir -p build
 	@mkdir -p $(BUILDDIR)
 	$(CXX) $(CFLAGS) $(INCLUDES) -MMD -c $< -o $@
 
-$(TEST_TARGET): $(filter-out $(BUILDDIR)/main.o, $(OBJECTS)) $(TEST_OBJECTS)
-	$(CXX) $(CFLAGS) $(INCLUDES) $^ -o $@
+test: $(TEST_TARGET)
+
+$(TEST_TARGET): $(TEST_OBJECTS) $(filter-out $(BUILDDIR)/main.o, $(OBJECTS))
+	$(CXX) $(CFLAGS) $(TEST_INCLUDES) $^ $(LIBS) -o $(TEST_TARGET)
 
 $(TEST_BUILDDIR)/%.o: $(TESTDIR)/%.cpp
-	@mkdir -p build
 	@mkdir -p $(TEST_BUILDDIR)
-	$(CXX) $(CFLAGS) $(INCLUDES) -MMD -c $< -o $@
+	$(CXX) $(CFLAGS) $(TEST_INCLUDES) -MMD -c $< -o $@
 
 -include $(DEPS)
 -include $(TEST_DEPS)
 
-test: $(TEST_TARGET)
-	./$(TEST_TARGET)
-
 clean:
-	rm -rf $(BUILDDIR) $(TARGET) $(TEST_BUILDDIR) $(TEST_TARGET)
+	@rm -rf $(BUILDDIR) $(TEST_BUILDDIR) $(TARGET) $(TEST_TARGET) build
 
