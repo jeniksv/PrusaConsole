@@ -26,4 +26,10 @@ int main(){
 	// for(auto& i : r) std::cout << i << std::endl;
 	std::cout << t.get_path_match("/home/jenda/Dow") << std::endl;
 	std::cout << t.get_path_match("s") << std::endl;
+
+	/*
+	 * TODO should be only code in main
+	 * std::unique_ptr<user_interface> ui = new console_UI();
+	 * ui->main_loop();
+	 */
 } 

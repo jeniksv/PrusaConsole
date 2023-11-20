@@ -6,6 +6,14 @@
 
 // teoreticky tohle muze byt predek jenom, od kteryho budou dedit konkretni commandy
 // TODO std::function for action ?
+
+enum class dbus_action {
+	START_PRINT,
+	STOP_PRINT,
+};
+
+
+// command_base
 class command{
 public:
 	command(const std::string& name) : name(name) {}
@@ -20,5 +28,12 @@ public:
 struct command_comparator{
 	bool operator()(const command& lhs, const command& rhs) const;
 };
+
+/*
+class print_start_command(){
+public:
+	
+}
+*/
 
 #endif
