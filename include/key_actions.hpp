@@ -8,7 +8,7 @@
 // action functions modify
 class key_action_base{
 public:
-        virtual ~key_action();
+        virtual ~key_action_base();
 
 	// TODO return type maybe should be std::string because of scope
         virtual std::string modify_current(const std::string& current);

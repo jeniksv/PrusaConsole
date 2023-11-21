@@ -38,7 +38,7 @@ std::vector<std::string> tab_completion::get_commands_subset(const std::string& 
         return result;
 }
 
-// TODO check if vector is sorted
+// TODO use std::set instead of vector 
 // not so obvious that i filter this vector from set
 std::string tab_completion::longest_common_prefix(const std::vector<std::string>& commands){
 	if(commands.empty()){

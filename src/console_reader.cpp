@@ -2,7 +2,10 @@
 #include <map>
 #include <memory>
 
-unix_console_IO::unix_console_IO() : _history(), _tab_completion() {
+unix_console_IO::unix_console_IO(){
+	_history_ptr = std::make_shared<history>(history());
+	_tab_completion_ptr = std::make_shared<tab_completion>(tab_completion());
+
 	FILE *f = fopen("/dev/tty", "rw");
 	SCREEN *s = newterm(nullptr, f, f);
 	set_term(s);
@@ -20,6 +23,7 @@ void unix_console_IO::write(const std::string& str) override{
 	printw(str);
 }
 
+/*
 // TODO maybe just use shared_ptr<>
 std::string unix_console_IO::read_line() override{
 	std::map<int, std::unique_ptr<key_action_base>> key_actions = {
@@ -41,5 +45,5 @@ std::string unix_console_IO::read_line() override{
 		}
 	}
 }
-
+*/
 
