@@ -29,7 +29,20 @@ int main(){
 
 	/*
 	 * TODO should be only code in main
+	 * console_UI{
+	 * public:
+	 * 	mainloop(){
+	 *		while(true){
+	 *			std::string line = _reader.readline();
+	 *			command = _parser.parseline(line);
+	 *			command.execute(); 
+	 *		}
+	 * 	}
+	 * private:
+	 * 	console_reader _reader;
+	 * 	command_parser _parser;
+	 * }
 	 * std::unique_ptr<user_interface> ui = new console_UI();
-	 * ui->main_loop();
+	 * ui->mainloop();
 	 */
 } 

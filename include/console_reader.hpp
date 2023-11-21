@@ -2,56 +2,37 @@
 #define CONSOLE_READER_H_
 
 #include <string>
+#include <memory>
+#include <ncurses.h>
 
-enum class key_event {
-	ENTER,
-	NO_ACTION_KEY,
-	BACKSPACE,
-	TAB,
-	ARROW_LEFT,
-	ARROW_RIGHT,
-	ARROW_UP,
-	ARROW_DOWN,
-	// TODO ctrl, alt, shift actions
-};
+#include "key_actions.hpp"
 
-class key{
-public:
-	key(key_event e);
-	key(key_event e, int v);
-	
-	key_event type;
-	int value;
-};
-
-// std::unique_ptr<command_base>
 
 class console_IO_base{
 public:
 	virtual ~console_IO_base();
 
-	virtual void write_char(char k) = 0;
-	virtual void write_line(std::string line) = 0;
+	virtual void write(std::string str) = 0;
 	
-	virtual char read() = 0;
-	// virtual char read(int count) = 0;
-	virtual key read_key() = 0;
 	virtual std::string read_line() = 0;
 };
 
-/*
+
 class unix_console_IO : public console_reader_base{
 public:
-	key read_key();
+	unix_console_IO();
+
+	~unix_console_IO() override;
+
+	void write(const std::string& str) override;
+
 	std::string read_line() override;
 private:
-	key_event get_key();
-
-	write_char
-	history _history;
-	tab_completion _tab_completion;
+	// will not be private, i should pass it to specific action commands
+	std::shared_ptr<history> _history_ptr;
+	std::shared_ptr<tab_completion> _tab_completion_ptr;
 };
-*/
+
 /*
  * while(true){
  * 	key k = get_key();
