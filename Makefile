@@ -1,6 +1,6 @@
 CXX = g++
 CFLAGS = -Wall -std=c++20
-LIBS = -lgtest -lgtest_main -lpthread
+LIBS = -lgtest -lgtest_main -lpthread #-L cpp-terminal/cpp-terminal  -lcpp-terminal
 
 TARGET = prusa-console
 TEST_TARGET = test_runner
@@ -13,7 +13,7 @@ TEST_BUILDDIR = build/tests
 SOURCES = $(wildcard $(SRCDIR)/*.cpp)
 OBJECTS = $(SOURCES:$(SRCDIR)/%.cpp=$(BUILDDIR)/%.o)
 DEPS = $(OBJECTS:.o=.d)
-INCLUDES = -I $(INCDIR)
+INCLUDES = -I $(INCDIR) #-I cpp-terminal 
 
 TEST_SOURCES = $(wildcard $(TESTDIR)/*.cpp)
 TEST_OBJECTS = $(TEST_SOURCES:$(TESTDIR)/%.cpp=$(TEST_BUILDDIR)/%.o)

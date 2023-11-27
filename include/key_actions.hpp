@@ -14,8 +14,19 @@ public:
         virtual std::string modify_current(const std::string& current);
 };
 
+/* TODO tohle vyres potom, ted potrebujes aspon uz nacitat ten vstup
+class key_action_factory{
+public:
+	std::unique_ptr<key_action_base> get_action(Term::Key key_type){
+		if(tab ...)
+	
+	}
+};
+*/
+
 // TODO chci vytvorit spesl tridu pro kazdou klavesu? -> JO
 // ARROW KEY UP
+// TODO update last in history
 class arrow_up_key_action : public key_action_base{
 public:
 	arrow_up_key_action(std::shared_ptr<history> h_ptr);

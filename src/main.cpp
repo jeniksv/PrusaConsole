@@ -1,48 +1,32 @@
 #include "command.hpp"
-#include "tab_completion.hpp"
-#include "history.hpp"
-
+//#include "tab_completion.hpp"
+//#include "history.hpp"
+#include "console_reader.hpp"
 
 int main(){
-	history h(".console_reader_history");
-
-	h.add("ahoj");
-	h.add("jak");
-	h.add("se");
-	h.add("mas");
-
-	for(int i=0; i < 10; ++i){
-		std::cout << h.get_current() << std::endl;
-		h.move_back();
-	}
-	
-	//std::cout << tab_completion::get_command_match() << std::endl;
-
-	tab_completion t({"aaaaa", "aabc", "aabb"});
-	std::cout << t.get_command_match("a") << std::endl;
-
-	// auto r = t.get_command_matches("aab");
-
-	// for(auto& i : r) std::cout << i << std::endl;
-	std::cout << t.get_path_match("/home/jenda/Dow") << std::endl;
-	std::cout << t.get_path_match("s") << std::endl;
-
 	/*
 	 * TODO should be only code in main
+	 * maybe argument should be all available commands
+	 * console_UI ui; // interface here makes sense, if there will be also GUI, a to se mnou nepocitejte xddd
+	 * ui.mainloop();
+	 *
+	 * API
 	 * console_UI{
 	 * public:
 	 * 	mainloop(){
 	 *		while(true){
 	 *			std::string line = _reader.readline();
-	 *			command = _parser.parseline(line);
-	 *			command.execute(); 
+	 *			command c = _parser.parseline(line);
+	 *			
+	 *			if(c == quit) break;	
+	 *			
+	 *			_client.execute(c);
 	 *		}
 	 * 	}
 	 * private:
 	 * 	console_reader _reader;
 	 * 	command_parser _parser;
+	 * 	dbus_client _client;
 	 * }
-	 * std::unique_ptr<user_interface> ui = new console_UI();
-	 * ui->mainloop();
 	 */
 } 
