@@ -13,12 +13,12 @@ TEST_BUILDDIR = build/tests
 SOURCES = $(wildcard $(SRCDIR)/*.cpp)
 OBJECTS = $(SOURCES:$(SRCDIR)/%.cpp=$(BUILDDIR)/%.o)
 DEPS = $(OBJECTS:.o=.d)
-INCLUDES = -I $(INCDIR) #-I cpp-terminal 
+INCLUDES = -I$(INCDIR) -I external/cpp-terminal
 
 TEST_SOURCES = $(wildcard $(TESTDIR)/*.cpp)
 TEST_OBJECTS = $(TEST_SOURCES:$(TESTDIR)/%.cpp=$(TEST_BUILDDIR)/%.o)
 TEST_DEPS = $(TEST_OBJECTS:.o=.d)
-TEST_INCLUDES = -I$(INCDIR) -I/usr/src/googletest/googletest/include/
+TEST_INCLUDES = -I$(INCDIR) -Iextern/googletest/googletest/include
 
 .PHONY: all clean test
 
