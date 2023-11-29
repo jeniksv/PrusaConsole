@@ -1,8 +1,7 @@
 a.out
 test_runner
 prusa-console
-build/app/*
-build/tests/*
+build/*
 temp/*
 .history_history
 .console_reader_history
