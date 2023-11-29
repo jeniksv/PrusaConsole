@@ -25,6 +25,8 @@ public:
 	bool starts_with(const std::string& prefix) const;
 };
 
+// TODO command factory
+
 struct command_comparator{
 	bool operator()(const command& lhs, const command& rhs) const;
 };
