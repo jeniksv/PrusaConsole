@@ -90,6 +90,15 @@ public:
 };
 
 
+class enter_action : public key_action_base{
+public:
+	void modify_current(std::string& current) override;
+};
+
+//class ctrl_c_action : public key_action_base{
+//public: -> natvrdo se zavola exit(0);
+
+
 class default_action : public key_action_base{
 public:
 	default_action(std::string k);

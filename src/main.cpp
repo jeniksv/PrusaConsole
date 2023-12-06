@@ -14,7 +14,7 @@ int main(){
 			break;
 		}
 
-		std::cout << line << std::endl;
+		// std::cout << line << std::endl;
 	}
 	//} catch(...){}
 }

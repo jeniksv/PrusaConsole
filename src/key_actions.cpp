@@ -14,6 +14,10 @@ std::unique_ptr<key_action_base> key_action_factory::get_action(const Term::Key&
 	
 	if(key_type == Term::Key::Backspace) return std::make_unique<backspace_action>();
 	if(key_type == Term::Key::Space) return std::make_unique<space_action>();
+	if(key_type == Term::Key::Enter) return std::make_unique<enter_action>();
+
+	// TODO this should terminate whole app
+	if(key_type == Term::Key::Ctrl_C) return std::make_unique<enter_action>();
 	// if(key_type == Term::key::) return std::make_unique<>();
 
 	// TODO esc can return console state to default state
@@ -45,6 +49,10 @@ void tab_action::modify_current(std::string& current){
 
 void space_action::modify_current(std::string& current){
 	current = current + " ";
+}
+
+void enter_action::modify_current(std::string& current){
+	current = current + "\n";
 }
 
 

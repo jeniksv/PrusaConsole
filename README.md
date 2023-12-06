@@ -10,11 +10,16 @@ git submodule update --init --recursive
 
 You can build project using CMakeList or build.sh script
 ```
-./build.sh
+./project.sh --build
 ```
 
 You can clean up project using
 ```
-./build.sh --clean
+./project.sh --clean
+```
+
+You can run tests using
+```
+./project.sh --test
 ```
 

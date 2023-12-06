@@ -29,14 +29,15 @@ std::string console_reader::read_line(){
 
 		Term::Key key(event);
 
-		if(key == Term::Key::Enter){
-			return current;
-		}
-
 		// TODO tohle je necitelny jak svina, lip
 		clear_line(current);
 		_key_action_factory.get_action(key)->modify_current(current);
 		write_line(current);
+
+		// TODO chytrejsi by mozna bylo se koukat na posledni znak, jestli nahodou neni newline
+		if(key == Term::Key::Enter){
+			return current;
+		}
 		// TODO jak moc se lisi current a previous, podle toho napsat neco do konzole, ted je to stupid
 	}	
 }
