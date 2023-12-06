@@ -1,38 +1,25 @@
-/*
 #include "command.hpp"
-//#include "tab_completion.hpp"
-//#include "history.hpp"
+#include "tab_completion.hpp"
+#include "history.hpp"
 #include "console_reader.hpp"
 
-int main(){
-	*
-	 * TODO should be only code in main
-	 * maybe argument should be all available commands
-	 * console_UI ui; // interface here makes sense, if there will be also GUI, a to se mnou nepocitejte xddd
-	 * ui.mainloop();
-	 *
-	 * API
-	 * console_UI{
-	 * public:
-	 * 	mainloop(){
-	 *		while(true){
-	 *			std::string line = _reader.readline();
-	 *			command c = _parser.parseline(line);
-	 *			
-	 *			if(c == quit) break;	
-	 *			
-	 *			_client.execute(c);
-	 *		}
-	 * 	}
-	 * private:
-	 * 	console_reader _reader;
-	 * 	command_parser _parser;
-	 * 	dbus_client _client;
-	 * }
-	 *
-}
-*/
 
+int main(){
+	//try{
+	console_reader c;
+	while(true){
+		std::string line = c.read_line();
+		
+		if(line == "exit"){
+			break;
+		}
+
+		std::cout << line << std::endl;
+	}
+	//} catch(...){}
+}
+
+/*
 #include "cpp-terminal/cursor.hpp"
 #include "cpp-terminal/exception.hpp"
 #include "cpp-terminal/input.hpp"
@@ -58,7 +45,7 @@ int main(){
         while(true){
                 Term::Event event = Term::read_event();
 
-                if(event.type() != Term::Event::Type::Key){
+  	              if(event.type() != Term::Event::Type::Key){
                         continue;
                 }
 
@@ -86,5 +73,4 @@ int main(){
                 Term::cout << key.name() << std::flush;
                 // TODO
         }
-}
-
+}*/

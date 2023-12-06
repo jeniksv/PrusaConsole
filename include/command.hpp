@@ -18,6 +18,7 @@ class command{
 public:
 	command(const std::string& name) : name(name) {}
 
+	// TODO getter and setter methods
 	std::string name;
 
 	void execute(); // TODO virtual? and then also virtual destructor

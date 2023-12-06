@@ -12,6 +12,8 @@
 // TODO more complex -> each command should have specified aruments, which can be completed
 class tab_completion {
 public:
+	tab_completion();
+	// TODO get rid of
 	tab_completion(const std::set<std::string>& commands);
 
         tab_completion(const std::set<command, command_comparator>& commands);

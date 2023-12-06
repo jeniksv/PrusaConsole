@@ -8,13 +8,42 @@ enable_testing()
 subdirs(extern/cpp-terminal)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-add_executable(
-    prusa-console 
+
+add_library(
+    prusa-console-lib
     src/command.cpp
     src/console_reader.cpp
     src/history.cpp
     src/main.cpp
     src/tab_completion.cpp
+    src/key_actions.cpp
 )
 
-target_link_libraries(prusa-console cpp-terminal)
+target_link_libraries(
+    prusa-console-lib
+    cpp-terminal
+)
+
+add_executable(
+    prusa-console
+    src/main.cpp
+)
+
+target_link_libraries(prusa-console prusa-console-lib)
+
+subdirs(extern/googletest)
+
+add_executable(
+  tests
+  tests/history_tests.cpp
+  tests/tab_completion_tests.cpp
+)
+
+target_link_libraries(
+  tests
+  GTest::gtest_main
+  prusa-console-lib
+)
+
+include(GoogleTest)
+gtest_discover_tests(tests)

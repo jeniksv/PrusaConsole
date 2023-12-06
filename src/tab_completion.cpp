@@ -4,6 +4,8 @@
 #include <iostream>
 // TODO use stringstream instead of std::string
 
+tab_completion::tab_completion() : _commands() {}
+
 tab_completion::tab_completion(const std::set<std::string>& commands) : _commands() {
 	for(const std::string& s : commands){
 		_commands.insert(command(s));

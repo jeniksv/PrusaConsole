@@ -7,3 +7,4 @@ temp/*
 .console_reader_history
 TODO
 filesystem_mock
+.prusa_console_history

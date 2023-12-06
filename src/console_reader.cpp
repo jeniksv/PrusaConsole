@@ -1,33 +1,42 @@
 #include "console_reader.hpp"
-/*
-#include "cpp-terminal/cursor.hpp"
-#include "cpp-terminal/exception.hpp"
-#include "cpp-terminal/input.hpp"
-#include "cpp-terminal/iostream.hpp"
-#include "cpp-terminal/key.hpp"
-#include "cpp-terminal/options.hpp"
-#include "cpp-terminal/screen.hpp"
-#include "cpp-terminal/terminal.hpp"
-#include "cpp-terminal/tty.hpp"
-#include "cpp-terminal/version.hpp"
-*/
-/*
+
+console_reader::console_reader() : _history(".prusa_console_history"), _tab(), _key_action_factory(_history, _tab) {
+	Term::terminal.setOptions(Term::Option::NoClearScreen, Term::Option::NoSignalKeys, Term::Option::Cursor, Term::Option::Raw);
+	Term::Screen term_size{Term::screen_size()};
+	Term::Cursor cursor{Term::cursor_position()};
+}
+
+void console_reader::clear_line(const std::string& s){
+	for(int i=0; i < s.length(); ++i){
+		Term::cout << "\b \b";
+	}
+}
+
+void console_reader::write_line(const std::string& s){
+	Term::cout << s << std::flush;
+}
+
 std::string console_reader::read_line(){
 	std::string current;
-
+	
+	// TODO store previous states, history related
 	while(true){
 		Term::Event event = Term::read_event();
-		
+
 		if(event.type() != Term::Event::Type::Key){
 			continue;
 		}
 
-		Term::Key key(event); // TODO zbavit se Term::Key za Term::Event::Type::Key::Enter
+		Term::Key key(event);
 
 		if(key == Term::Key::Enter){
 			return current;
 		}
-		// TODO
+
+		// TODO tohle je necitelny jak svina, lip
+		clear_line(current);
+		_key_action_factory.get_action(key)->modify_current(current);
+		write_line(current);
+		// TODO jak moc se lisi current a previous, podle toho napsat neco do konzole, ted je to stupid
 	}	
 }
-*/
