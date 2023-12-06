@@ -31,10 +31,11 @@ std::string console_reader::read_line(){
 
 		// TODO tohle je necitelny jak svina, lip
 		clear_line(current);
-		_key_action_factory.get_action(key)->modify_current(current);
+		_key_action_factory.get_action(key)->execute(current);
 		write_line(current);
 
 		// TODO chytrejsi by mozna bylo se koukat na posledni znak, jestli nahodou neni newline
+		// TODO jeste lepsi by bylo aby execute vracelo bool, jestli se ma pokracovat, nebo ne
 		if(key == Term::Key::Enter){
 			return current;
 		}

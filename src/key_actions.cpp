@@ -17,7 +17,7 @@ std::unique_ptr<key_action_base> key_action_factory::get_action(const Term::Key&
 	if(key_type == Term::Key::Enter) return std::make_unique<enter_action>();
 
 	// TODO this should terminate whole app
-	if(key_type == Term::Key::Ctrl_C) return std::make_unique<enter_action>();
+	if(key_type == Term::Key::Ctrl_C) return std::make_unique<ctrl_c_action>();
 	// if(key_type == Term::key::) return std::make_unique<>();
 
 	// TODO esc can return console state to default state
@@ -28,39 +28,43 @@ std::unique_ptr<key_action_base> key_action_factory::get_action(const Term::Key&
 
 arrow_up_key_action::arrow_up_key_action(history& h) : _history_ref(h) {}
 
-void arrow_up_key_action::modify_current(std::string& current){
+void arrow_up_key_action::execute(std::string& current){
 	// TODO
 }
 
 arrow_down_key_action::arrow_down_key_action(history& h) : _history_ref(h) {}
 
-void arrow_down_key_action::modify_current(std::string& current){
+void arrow_down_key_action::execute(std::string& current){
 }
 
-void backspace_action::modify_current(std::string& current){
+void backspace_action::execute(std::string& current){
 	current = current.empty() ? "" : current.substr(0, current.size() - 1);
 }
 
 
 tab_action::tab_action(tab_completion& t) : _tab_ref(t) {}
 
-void tab_action::modify_current(std::string& current){
+void tab_action::execute(std::string& current){
 }
 
-void space_action::modify_current(std::string& current){
+void space_action::execute(std::string& current){
 	current = current + " ";
 }
 
-void enter_action::modify_current(std::string& current){
+void enter_action::execute(std::string& current){
 	current = current + "\n";
+}
+
+void ctrl_c_action::execute(std::string& current){
+	exit(0);
 }
 
 
 default_action::default_action(std::string k) : _key_name(k) {}
 
-void default_action::modify_current(std::string& current){
+void default_action::execute(std::string& current){
 	current += _key_name;
 }
 
 
-void no_action::modify_current(std::string& current){}
+void no_action::execute(std::string& current){}

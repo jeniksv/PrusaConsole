@@ -12,7 +12,7 @@ class key_action_base{
 public:
         virtual ~key_action_base();
 
-        virtual void modify_current(std::string& current) = 0;
+        virtual void execute(std::string& current) = 0;
 };
 
 
@@ -32,7 +32,7 @@ class arrow_up_key_action : public key_action_base{
 public:
 	arrow_up_key_action(history& h);
 
-	void modify_current(std::string& current) override;
+	void execute(std::string& current) override;
 private:
 	history& _history_ref;
 };
@@ -42,7 +42,7 @@ class arrow_down_key_action : public key_action_base{
 public:
         arrow_down_key_action(history& h);
 
-        void modify_current(std::string& current) override;
+        void execute(std::string& current) override;
 private:
 	history& _history_ref;
 };
@@ -52,7 +52,7 @@ class arrow_left_key_action : public key_action_base{
 public:
         arrow_left_key_action(history& h);
 
-        void modify_current(std::string& current) override;
+        void execute(std::string& current) override;
 private:
 	history& _history_ref;
 };
@@ -62,7 +62,7 @@ class arrow_right_key_action : public key_action_base{
 public:
         arrow_right_key_action(history& h);
 
-        void modify_current(std::string& current) override;
+        void execute(std::string& current) override;
 private:
 	history& _history_ref;
 };
@@ -72,7 +72,7 @@ class tab_action : public key_action_base{
 public:
 	tab_action(tab_completion& t); // TODO can be const?
 
-	void modify_current(std::string& current) override;
+	void execute(std::string& current) override;
 private:
 	tab_completion& _tab_ref;
 };
@@ -80,30 +80,33 @@ private:
 
 class backspace_action : public key_action_base{
 public:
-	void modify_current(std::string& current) override;
+	void execute(std::string& current) override;
 };
 
 
 class space_action : public key_action_base{
 public:
-	void modify_current(std::string& current) override;
+	void execute(std::string& current) override;
 };
 
 
 class enter_action : public key_action_base{
 public:
-	void modify_current(std::string& current) override;
+	void execute(std::string& current) override;
 };
 
-//class ctrl_c_action : public key_action_base{
-//public: -> natvrdo se zavola exit(0);
+
+class ctrl_c_action : public key_action_base{
+public:
+	void execute(std::string& current) override;
+};
 
 
 class default_action : public key_action_base{
 public:
 	default_action(std::string k);
 
-	void modify_current(std::string& current) override;
+	void execute(std::string& current) override;
 private:
 	std::string _key_name;
 };
@@ -111,7 +114,7 @@ private:
 
 class no_action : public key_action_base{
 public:
-	void modify_current(std::string& current) override;
+	void execute(std::string& current) override;
 };
 
 #endif

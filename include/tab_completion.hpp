@@ -34,7 +34,7 @@ private:
 
 	std::string trim_prefix(const std::string& prefix);
 
-        std::string longest_common_prefix(const std::vector<std::string>& commands);
+        std::string longest_common_prefix(std::vector<std::string>& commands);
 
         std::set<command, command_comparator> _commands;
 };

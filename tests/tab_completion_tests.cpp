@@ -23,6 +23,7 @@ protected:
 	}
 
         void TearDown() override{
+		// asi je hezky po sobe uklidit
                 // std::filesystem::remove_all("filesystem_mock");
         }
 
@@ -59,7 +60,30 @@ TEST_F(TabCompletionTest, GetCommandMatch){
 }
 
 TEST_F(TabCompletionTest, GetPathMatch){
-	// EXPECT_EQ(tab_ptr.get_path_match("Doc"), "Documents");
+	std::string current = "filesystem_m";
+	
+	current = tab_ptr->get_path_match(current);
+	EXPECT_EQ(current, "filesystem_mock");
+	
+	current.append("/Pi");
+	current = tab_ptr->get_path_match(current);
+	EXPECT_EQ(current, "filesystem_mock/Pictures");
+
+	current.append("/I");
+	current = tab_ptr->get_path_match(current);
+	EXPECT_EQ(current, "filesystem_mock/Pictures/IMG2023030");
+
+	current.append("3");
+	current = tab_ptr->get_path_match(current);
+	EXPECT_EQ(current, "filesystem_mock/Pictures/IMG2023030301");
+
+	current.append("5");
+	current = tab_ptr->get_path_match(current);
+	EXPECT_EQ(current, "filesystem_mock/Pictures/IMG20230303015");
+
+	current.append("7");
+	current = tab_ptr->get_path_match(current);
+	EXPECT_EQ(current, "filesystem_mock/Pictures/IMG20230303015757");
 }
 
 TEST_F(TabCompletionTest, GetCommandMatches){

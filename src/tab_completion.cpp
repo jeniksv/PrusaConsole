@@ -42,16 +42,14 @@ std::vector<std::string> tab_completion::get_commands_subset(const std::string& 
 
 // TODO use std::set instead of vector 
 // not so obvious that i filter this vector from set
-std::string tab_completion::longest_common_prefix(const std::vector<std::string>& commands){
+std::string tab_completion::longest_common_prefix(std::vector<std::string>& commands){
 	if(commands.empty()){
 		return "";
 	}
 	
-	/*
 	if(!std::is_sorted(commands.begin(), commands.end())){
 		std::sort(commands.begin(), commands.end());
 	}
-	*/
 
 	std::string first = *(commands.begin());
 	std::string last = *(commands.end() - 1);
@@ -70,7 +68,8 @@ std::string tab_completion::longest_common_prefix(const std::vector<std::string>
 
 
 std::string tab_completion::get_command_match(const std::string& prefix){
-	return longest_common_prefix(get_commands_subset(prefix));
+	std::vector<std::string> temp = get_commands_subset(prefix);
+	return longest_common_prefix(temp);
 }
 
 
