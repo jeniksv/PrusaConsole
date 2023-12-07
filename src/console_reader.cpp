@@ -6,6 +6,10 @@ console_reader::console_reader() : _history(".prusa_console_history"), _tab(), _
 	Term::Cursor cursor{Term::cursor_position()};
 }
 
+void console_reader::show_prompt(){
+	Term::cout << "> " << std::flush;
+}
+
 void console_reader::clear_line(const std::string& s){
 	for(int i=0; i < s.length(); ++i){
 		Term::cout << "\b \b";
@@ -18,6 +22,8 @@ void console_reader::write_line(const std::string& s){
 
 std::string console_reader::read_line(){
 	std::string current;
+
+	show_prompt();
 	
 	// TODO store previous states, history related
 	while(true){

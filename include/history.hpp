@@ -10,11 +10,11 @@ class history {
 public:
         history();
 
-        history(const std::string& file_name);
+        history(const std::string&);
 
         ~history();
 
-        void add(const std::string& command);
+        void add(const std::string&);
 
         void move_next();
 
@@ -25,7 +25,7 @@ public:
         //
         // iterates only through commands which has common prefix with string pattern
         //
-        void enable_pattern_matching(const std::string& pattern);
+        void enable_pattern_matching(const std::string&);
 
         void disable_pattern_matching();
 private:

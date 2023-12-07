@@ -33,7 +33,7 @@ std::vector<std::string> tab_completion::get_commands_subset(const std::string& 
 
         for(const command& c : _commands){
                 if(c.starts_with(prefix)){
-                        result.push_back(c.name);
+                        result.push_back(c.get_name());
                 }
         }
 

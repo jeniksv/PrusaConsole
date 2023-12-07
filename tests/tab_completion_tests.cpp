@@ -24,7 +24,7 @@ protected:
 
         void TearDown() override{
 		// asi je hezky po sobe uklidit
-                // std::filesystem::remove_all("filesystem_mock");
+                std::filesystem::remove_all("filesystem_mock");
         }
 
 	void SetUpMockFileSystem(){
@@ -39,6 +39,7 @@ protected:
 		CreateFile("filesystem_mock/Pictures/IMG20230303013148");
 		CreateFile("filesystem_mock/Pictures/IMG20230303015757");
 		CreateFile("filesystem_mock/Pictures/IMG20230303015801");
+		std::filesystem::create_directory("filesystem_mock/Downloads");
 		// TODO create rest of filesystem
 	}
 

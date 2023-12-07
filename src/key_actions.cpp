@@ -48,11 +48,11 @@ void tab_action::execute(std::string& current){
 }
 
 void space_action::execute(std::string& current){
-	current = current + " ";
+	current.append(" ");
 }
 
 void enter_action::execute(std::string& current){
-	current = current + "\n";
+	current.append("\n");
 }
 
 void ctrl_c_action::execute(std::string& current){
@@ -63,7 +63,7 @@ void ctrl_c_action::execute(std::string& current){
 default_action::default_action(std::string k) : _key_name(k) {}
 
 void default_action::execute(std::string& current){
-	current += _key_name;
+	current.append(_key_name);
 }
 
 

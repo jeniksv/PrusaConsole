@@ -22,7 +22,9 @@ class console_reader{
 public:
 	console_reader();
 
-	// console_reader(history&, tab_completion&); 
+	// console_reader(history&, tab_completion&);
+	void show_prompt();
+
 	void clear_line(const std::string&);	
 
 	std::string read_line();
