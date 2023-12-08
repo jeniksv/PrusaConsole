@@ -11,6 +11,7 @@ class TabCompletionTest: public testing::Test{
 protected:
 	std::unique_ptr<tab_completion> tab_ptr;
 
+	// TODO switch for SetUpTestCase a TearDownTestCase
 	void SetUp() override{
 		SetUpMockFileSystem();
 
@@ -23,7 +24,6 @@ protected:
 	}
 
         void TearDown() override{
-		// asi je hezky po sobe uklidit
                 std::filesystem::remove_all("filesystem_mock");
         }
 
@@ -40,6 +40,7 @@ protected:
 		CreateFile("filesystem_mock/Pictures/IMG20230303015757");
 		CreateFile("filesystem_mock/Pictures/IMG20230303015801");
 		std::filesystem::create_directory("filesystem_mock/Downloads");
+		std::filesystem::create_directory("filesystem_mock/Documents");
 		// TODO create rest of filesystem
 	}
 

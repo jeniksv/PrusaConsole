@@ -46,5 +46,7 @@ std::string console_reader::read_line(){
 			return current;
 		}
 		// TODO jak moc se lisi current a previous, podle toho napsat neco do konzole, ted je to stupid
-	}	
+	}
+
+	_history.reset();
 }

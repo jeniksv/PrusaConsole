@@ -70,11 +70,13 @@ private:
 
 class tab_action : public key_action_base{
 public:
-	tab_action(tab_completion&); // TODO can be const?
+	tab_action(tab_completion&, bool); // TODO can be const?
 
 	void execute(std::string&) override;
 private:
 	tab_completion& _tab_ref;
+
+	bool _double_tab;
 };
 
 
@@ -92,7 +94,11 @@ public:
 
 class enter_action : public key_action_base{
 public:
+	enter_action(history&);
+
 	void execute(std::string&) override;
+private:
+	history& _history_ref;
 };
 
 

@@ -46,6 +46,25 @@ enum class command_state {
 
 // TODO musi to byt navrzeny tak, aby se pridala jedna trida a pridalo se to potom do nejake factory, to pak uplne staci
 // takze command factory, kde se bude primo parsovat ten string?
+// TODO zohlednit jeste nejak druh tiskarny
+// abstract factory can be suitable solution for this problem, then wohle app will start with ./prusa_console --sl2 (--sl1, --sl1s, mk1, )
+// or build pattern may solve this problem printer.with_start_print_command().with_home_tilt_command()
+// or has file will be printer commands specificated
+// use higher level of abstraction printer <- slx_printer <- sl2_printer ()
+// 					   <- fdm_printer <- mk4 (or mk3, mini or whatever)
+
+// TODO musis hlavne oddedlit console_reader a zbytek projektu, at se z toho da kdyztak udelat client server aplikace
+// ten protokol muze byt uplne easy jakoze proste posles string (request) a zpatky dostanes response, coz bude jenom enum {OK, INVALID_ARGUMENT, UNKNOWN_COMMAND ...}
+// 	-> ten protokol je hroznej z nekolika duvodu (neni moc genericky, posilat stringy je hnus + )
+
+/*
+ * class printer{
+ * 	-> predvytvorene soubory commandu?
+ *	printer(commands)
+ *	commands;
+ * }
+ *  ktere se pri inicializaci predaji commandy
+ */
 
 // command_base
 class command{

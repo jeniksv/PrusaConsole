@@ -1,11 +1,13 @@
 #include "history.hpp"
 
-history::history() : _current_commands(), _current_index(-1), _history_file_name(".history_history") {
+history::history() : _current_commands(), _current_index(), _history_file_name(".history_history") {
 	fetch_history();
+	reset();
 }
 
-history::history(const std::string& file_name) : _current_commands(), _current_index(-1), _history_file_name(file_name) {
+history::history(const std::string& file_name) : _current_commands(), _current_index(), _history_file_name(file_name) {
 	fetch_history();
+	reset();
 }
 
 history::~history() {
@@ -36,8 +38,17 @@ void history::fetch_history() {
 }
 
 void history::add(const std::string& command) {
+	if(std::all_of(command.begin(), command.end(), [](char c){ return std::isspace(c); })){
+		return;
+	}
+	
+	if(!_current_commands.empty() && command == _current_commands.back()){
+		return;
+	}
+
+	
 	_current_commands.push_back(command);
-	_current_index = _current_commands.size();
+	_current_index = _current_commands.size() - 1;
 }
 
 void history::move_next() {
@@ -58,4 +69,8 @@ std::string history::get_current() {
 	}
 
 	return _current_commands[_current_index]; 
+}
+
+void history::reset() {
+	_current_index = _current_commands.size() - 1;
 }

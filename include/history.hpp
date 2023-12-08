@@ -5,6 +5,11 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
+
+// specific behaviour:
+// 	-> if command contains only white spaces, it is not added to history
+// 	-> if command, which should be added to history is same as last command in history, it is not added to history
 
 class history {
 public:
@@ -21,6 +26,8 @@ public:
         void move_back();
 
         std::string get_current();
+
+	void reset();
 
         //
         // iterates only through commands which has common prefix with string pattern
