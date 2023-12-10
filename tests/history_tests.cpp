@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 #include <string>
 #include <memory>
@@ -11,25 +12,30 @@ protected:
 	std::vector<std::string> commands {"a", "b", "c", "d", "e", "f", "g", "h"};
 
 	void SetUp() override{
+		if(std::filesystem::exists(".tests_history")){
+			std::filesystem::remove(".tests_history");
+		}
+
 		history_ptr = std::make_unique<history>(history(".tests_history"));
 	}
 
-	void TearDown(){
+	void TearDown() override{
+		// tohle byla ta race condition, destruktor se zavolat az potom, co dobehla metoda
+		history_ptr.reset();
+
 		if(std::filesystem::exists(".tests_history")){
 			std::filesystem::remove(".tests_history");
-		}	
+		}
 	}
 };
 
+
 TEST_F(HistoryTest, AddAndGetCommands) {
 	history_ptr->add("a");
-	ASSERT_EQ(history_ptr->get_current(), "a");
+	ASSERT_EQ(history_ptr->get_current(), "");
 	
 	history_ptr->add("b");
-	ASSERT_EQ(history_ptr->get_current(), "b");
-	
-	history_ptr->add("c");
-	ASSERT_EQ(history_ptr->get_current(), "c");
+	ASSERT_EQ(history_ptr->get_current(), "");
 }
 
 TEST_F(HistoryTest, MoveNextAndBackAnd) {
@@ -37,9 +43,9 @@ TEST_F(HistoryTest, MoveNextAndBackAnd) {
 		history_ptr->add(s);
 	}
 
-	for(int i=7; i >= 0; --i){
-		ASSERT_EQ(history_ptr->get_current(), commands[i]);
+	for(int i = static_cast<int>(commands.size()) - 1; i >= 0; --i){
 		history_ptr->move_back();
+		ASSERT_EQ(history_ptr->get_current(), commands[i]);
 	}
 }
 
@@ -54,39 +60,33 @@ TEST_F(HistoryTest, WriteFetchHistory) {
 	// Fetch
 	history_ptr = std::make_unique<history>(history(".tests_history"));
 
-	for(int i=7; i >= 0; --i){
-		ASSERT_EQ(history_ptr->get_current(), commands[i]);
+	for(int i = static_cast<int>(commands.size()) - 1; i >= 0; --i){
 		history_ptr->move_back();
+		ASSERT_EQ(history_ptr->get_current(), commands[i]);
 	}
 }
 
-/*
-// NOT IMPLEMENTED
-TEST(HistoryTest, PatternMatchingEnabled) {
-	history hist("test_history.txt");
+TEST_F(HistoryTest, GetNextAndPrevious) {
+	for(const std::string& s : commands){
+		history_ptr->add(s);
+	}
 
-	hist.add("apple");
-	hist.add("banana");
-	hist.add("orange");
+	if(commands.size() < 4) return;
 
-	hist.enable_pattern_matching("app");
+	ASSERT_EQ(history_ptr->get_previous(), commands[static_cast<int>(commands.size()) - 1]);
+	ASSERT_EQ(history_ptr->get_previous(), commands[static_cast<int>(commands.size()) - 2]);
+	ASSERT_EQ(history_ptr->get_previous(), commands[static_cast<int>(commands.size()) - 3]);
+	ASSERT_EQ(history_ptr->get_next(), commands[static_cast<int>(commands.size()) - 2]);
 
-	ASSERT_EQ(hist.get_current(), "apple");
+	history_ptr->reset();
 
-	hist.move_next();
-	ASSERT_EQ(hist.get_current(), "");
+	for(int i = static_cast<int>(commands.size()) - 1; i > -10; --i){
+		std::string expected = i < 0 ? commands[0] : commands[i];
+		ASSERT_EQ(history_ptr->get_previous(), expected);
+	}
+
+	for(size_t i = 0; i < static_cast<int>(commands.size()) + 10; ++i){
+		std::string expected = i < commands.size() - 1 ? commands[i + 1] : "";
+		ASSERT_EQ(history_ptr->get_next(), expected);
+	}
 }
-
-TEST(HistoryTest, PatternMatchingDisabled) {
-	history hist("test_history.txt");
-
-	hist.add("apple");
-	hist.add("banana");
-	hist.add("orange");
-
-	hist.enable_pattern_matching("app");
-	hist.disable_pattern_matching();
-
-	ASSERT_EQ(hist.get_current(), "orange");
-}
-*/

@@ -18,6 +18,18 @@
 #include "cpp-terminal/tty.hpp"
 #include "cpp-terminal/version.hpp"
 
+// TODO class
+/*
+ * console_current_state{
+ * public:
+ * 	previous_key
+ * 	current_key
+ *
+ * }
+ */
+
+// factory pak muze dostavat celej current state
+
 class console_reader{
 public:
 	console_reader();

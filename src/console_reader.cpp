@@ -25,7 +25,6 @@ std::string console_reader::read_line(){
 
 	show_prompt();
 	
-	// TODO store previous states, history related
 	while(true){
 		Term::Event event = Term::read_event();
 

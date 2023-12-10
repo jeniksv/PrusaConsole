@@ -48,7 +48,7 @@ void history::add(const std::string& command) {
 
 	
 	_current_commands.push_back(command);
-	_current_index = _current_commands.size() - 1;
+	_current_index = _current_commands.size();
 }
 
 void history::move_next() {
@@ -71,6 +71,23 @@ std::string history::get_current() {
 	return _current_commands[_current_index]; 
 }
 
+std::string history::get_next() {
+	if(_current_index >= static_cast<int>(_current_commands.size()) - 1){
+		return "";
+	}
+
+	return _current_commands[++_current_index];
+}
+
+std::string history::get_previous() {
+	// je to size_t takze to podtect nemuze
+	if(_current_index <= 0 ){
+		return _current_commands.size() > 0 ? _current_commands[0] : "";
+	}
+
+	return _current_commands[--_current_index];
+}
+
 void history::reset() {
-	_current_index = _current_commands.size() - 1;
+	_current_index = _current_commands.size(); // _current_commands.size() - 1;
 }
