@@ -65,6 +65,7 @@ void enter_action::execute(std::string& current){
 }
 
 void ctrl_c_action::execute(std::string& current){
+	// TODO invalid pointers
 	exit(0);
 }
 

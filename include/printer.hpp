@@ -8,28 +8,50 @@
 
 #include "command.hpp"
 
-class printer_base{
+
+// printer is defined by set of commands
+class printer{
 public:
-	void add_command(const std::unique_ptr<command>);
-protected:
+	// teoreticky by to slo i tak, ze se v ctoru bude volat printer_factory
+	printer(const std::string&);
+
+	// void add_command(const std::unique_ptr<command>);
+
+	// std::unique_ptr<command> get_command(const std::string&);
+	// API bude get_command()->execute(std::vector<std::string> params);
+private:
+	// TODO factory bude friend
+	// TODO switch to map
 	std::vector<std::unique_ptr<command>> _commands;
 };
 
 class printer_factory{
-pulibc:
-	std::unique_ptr<printer_base> get_printer_type(const std::string&);
+public:
+	static std::unique_ptr<printer_base> get_printer_type(const std::string&);
+	
+	void init_printer(const std::string& name){
+		if(name == "--sl2"){
+			
+		}
+	
+	}
+
+private:
+
 };
 
+/*
 class sla_printer : public printer_base{
 };
 
 class fdm_printer : public printer_base{
 };
 
-class sl1 : sla_printer : public printer_base{
+class sl1 : public sla_printer{
 };
 
-class sl2 : sla_printer : public printer_base{
+class sl2 : public sla_printer{
 };
+*/
 
 #endif

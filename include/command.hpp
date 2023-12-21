@@ -4,8 +4,6 @@
 #include <string>
 #include <algorithm>
 
-// teoreticky tohle muze byt predek jenom, od kteryho budou dedit konkretni commandy
-// TODO mozna pouzit special vlakno pro praci s dbusem?
 // TODO tady se da v podstate pouzit ten starej stringovej protokol baseboard.do
 enum class dbus_action {
 	START_PRINT, // path to project
@@ -44,53 +42,47 @@ enum class command_state {
 };
 */
 
-// TODO musi to byt navrzeny tak, aby se pridala jedna trida a pridalo se to potom do nejake factory, to pak uplne staci
-// takze command factory, kde se bude primo parsovat ten string?
-// TODO zohlednit jeste nejak druh tiskarny
-// abstract factory can be suitable solution for this problem, then wohle app will start with ./prusa_console --sl2 (--sl1, --sl1s, mk1, )
-// or build pattern may solve this problem printer.with_start_print_command().with_home_tilt_command()
-// or has file will be printer commands specificated
-// use higher level of abstraction printer <- slx_printer <- sl2_printer ()
-// 					   <- fdm_printer <- mk4 (or mk3, mini or whatever)
+// app will start with ./prusa_console --sl2 (--sl1, --sl1s, mk1, )
 
-// TODO musis hlavne oddedlit console_reader a zbytek projektu, at se z toho da kdyztak udelat client server aplikace
-// ten protokol muze byt uplne easy jakoze proste posles string (request) a zpatky dostanes response, coz bude jenom enum {OK, INVALID_ARGUMENT, UNKNOWN_COMMAND ...}
-// 	-> ten protokol je hroznej z nekolika duvodu (neni moc genericky, posilat stringy je hnus + )
 
-/*
- * class printer{
- * 	-> predvytvorene soubory commandu?
- *	printer(commands)
- *	commands;
- * }
- *  ktere se pri inicializaci predaji commandy
- */
 
-// command_base
+// TODO rename to command_base
 class command{
-public:
+public:	
 	command(const std::string&);
+
+	virtual ~command();
 
 	std::string get_name() const;
 
-	void execute(); // TODO virtual? and then also virtual destructor
-
 	bool starts_with(const std::string&) const;
+
+	virtual void execute(const std::vector<std::string>&); // = 0; TODO make pure virtual, also vector can be const
+
+	//default, prints help for command -> kdyz se zavola help command, projede to vsechny commandy tiskarny a na nich zavola ->help();
+	virtual void help();
 private:
 	std::string _name;
 };
 
-// TODO command factory
 
 struct command_comparator{
 	bool operator()(const command&, const command&) const;
 };
 
-/*
-class print_start_command(){
+
+class exit : public command{
+public:
+	void execute(const std::vector<std::string>&) override;
+};
+
+class start_print : public command{
 public:
 	
-}
-*/
+};
+
+class stop_print : public command{
+public:
+};
 
 #endif

@@ -15,6 +15,11 @@ void command::execute(){
 	std::cout << "DBUS action " << _name << std::endl;
 }
 
+void command::help(){
+	std::cout << "Commands has no help text." << std::endl;
+}
+
+
 bool command_comparator::operator()(const command& lhs, const command& rhs) const{
 	return lhs.get_name() < rhs.get_name();
 }
