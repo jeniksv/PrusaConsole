@@ -1,7 +1,10 @@
 #include "command.hpp"
 #include <iostream>
 
+
 command::command(const std::string& _name) : _name(_name) {}
+
+command::~command() {}
 
 std::string command::get_name() const{
 	return _name;
@@ -11,15 +14,51 @@ bool command::starts_with(const std::string& prefix) const{
         return std::equal(prefix.begin(), prefix.end(), _name.begin());
 }
 
-void command::execute(){
-	std::cout << "DBUS action " << _name << std::endl;
+command_result command::execute(const std::vector<std::string>& params){
+	std::cout << "DBUS action " << _name << "with arguments";
+       	for(const std::string& s : params) std::cout << s << " ";
+	std::cout << std::endl;
+
+	return command_result::OK;
 }
 
 void command::help(){
 	std::cout << "Commands has no help text." << std::endl;
 }
 
-
 bool command_comparator::operator()(const command& lhs, const command& rhs) const{
 	return lhs.get_name() < rhs.get_name();
+}
+
+
+
+help_command::help_command() : command("help") {}
+
+command_result help_command::execute(const std::vector<std::string>& args){
+	if(args.size() > 0){
+		return command_result::INVALID_ARGUMENTS;
+	}
+	
+	std::cout << "help_command execute" << std::endl;
+	return command_result::OK;
+}
+
+void help_command::help(){
+	std::cout << "lists all commands and their usage" << std::endl;
+}
+
+
+exit_command::exit_command() : command("exit") {}
+
+command_result exit_command::execute(const std::vector<std::string>& args){
+	if(args.size() > 0){
+		return command_result::INVALID_ARGUMENTS;	
+	}
+
+	std::cout << "exit_command exexcute" << std::endl;
+	return command_result::OK;
+}
+
+void exit_command::help(){
+	std::cout << "exits application" << std::endl;
 }

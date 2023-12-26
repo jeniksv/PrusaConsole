@@ -4,51 +4,15 @@
 #include <string>
 #include <algorithm>
 
-// TODO tady se da v podstate pouzit ten starej stringovej protokol baseboard.do
-enum class dbus_action {
-	START_PRINT, // path to project
-	STOP_PRINT,
-
-	// advanced commands
-	SHOW_LAYER_INFO, // -> should display exposure0state, layer number
-	SHOW_LAYER_PNG, // path to project ..., tohle by se dalo vypisovat u layer_info
-	
-	// motor control
-	SET_TILT_POSITION,
-	SET_TOWER_POSITION,
-	SET_PUMP_POSITION,
-	SET_LED_DURATION,
-
-	STOP_TILT_MOVEMENT,
-	STOP_TOWER_MOVEMENT,
-	STOP_PUMP_MOVEMENT,
-
-	GET_TILT_POSITION, //maybe not only position, but all properties, homing status ...
-	GET_TOWER_POSITION,
-	GET_PUMP_POSITION, // optional, how long do you want to read position
-
-	GET_LOADCELL_DATA, // optional, how long do you want to read them
-	GET_RESIN_STATE, // used, in canister ...
-
-	GET_REMAING_TIME // in seconds
-};
-
-/*
-enum class command_state {
+enum class command_result{
 	OK,
-	INVALID_ARGUMENT,
+	INVALID_ARGUMENTS,
 	UNKNOWN_COMMAND,
-	
 };
-*/
-
-// app will start with ./prusa_console --sl2 (--sl1, --sl1s, mk1, )
 
 
-
-// TODO rename to command_base
 class command{
-public:	
+public:
 	command(const std::string&);
 
 	virtual ~command();
@@ -57,11 +21,11 @@ public:
 
 	bool starts_with(const std::string&) const;
 
-	virtual void execute(const std::vector<std::string>&); // = 0; TODO make pure virtual, also vector can be const
+	// TODO start using std::optional<std::vector<std::string>&>
+	virtual command_result execute(const std::vector<std::string>&); // = 0; TODO make pure virtual, also vector can be const
 
-	//default, prints help for command -> kdyz se zavola help command, projede to vsechny commandy tiskarny a na nich zavola ->help();
 	virtual void help();
-private:
+protected:
 	std::string _name;
 };
 
@@ -71,18 +35,36 @@ struct command_comparator{
 };
 
 
-class exit : public command{
+class exit_command : public command{
 public:
-	void execute(const std::vector<std::string>&) override;
+	exit_command();
+
+	command_result execute(const std::vector<std::string>&) override;
+
+	void help() override;
 };
 
-class start_print : public command{
+
+// muze byt friend na printer class aby vedel o vsech commandech
+class help_command : public command{
 public:
-	
+	help_command();
+
+	command_result execute(const std::vector<std::string>&) override;
+
+	void help() override;
 };
 
-class stop_print : public command{
+
+class start_print_command : public command{
 public:
+	command_result execute(const std::vector<std::string>&) override;	
+};
+
+
+class stop_print_command : public command{
+public:
+	command_result execute(const std::vector<std::string>&) override;
 };
 
 #endif

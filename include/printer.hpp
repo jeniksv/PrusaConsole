@@ -1,6 +1,7 @@
 #ifndef PRINTER_H_
 #define PRINTER_H_
 
+#include <iostream>
 #include <memory>
 #include <vector>
 #include <string>
@@ -9,49 +10,28 @@
 #include "command.hpp"
 
 
-// printer is defined by set of commands
+// printer is defined by name and set of commands
+// you can extended to ask via dbus for name at start of the app, so you dont need app arguments
 class printer{
 public:
-	// teoreticky by to slo i tak, ze se v ctoru bude volat printer_factory
+	printer();
+	
 	printer(const std::string&);
 
-	// void add_command(const std::unique_ptr<command>);
+	std::string get_type();
 
-	// std::unique_ptr<command> get_command(const std::string&);
-	// API bude get_command()->execute(std::vector<std::string> params);
+	bool valid_command(const std::string&);
+
+	std::unique_ptr<command>& get_action(const std::string&); 
 private:
-	// TODO factory bude friend
-	// TODO switch to map
-	std::vector<std::unique_ptr<command>> _commands;
-};
+	void add_command(const std::string&, std::unique_ptr<command>);
 
-class printer_factory{
-public:
-	static std::unique_ptr<printer_base> get_printer_type(const std::string&);
+	void build(const std::string&);
 	
-	void init_printer(const std::string& name){
-		if(name == "--sl2"){
-			
-		}
-	
-	}
+	std::string _type;
+	std::map<std::string, std::unique_ptr<command>> _commands;
 
-private:
-
+	friend class help_command;
 };
-
-/*
-class sla_printer : public printer_base{
-};
-
-class fdm_printer : public printer_base{
-};
-
-class sl1 : public sla_printer{
-};
-
-class sl2 : public sla_printer{
-};
-*/
 
 #endif

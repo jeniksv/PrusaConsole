@@ -27,16 +27,12 @@ std::unique_ptr<key_action_base> key_action_factory::get_action(const Term::Key&
 arrow_up_key_action::arrow_up_key_action(history& h) : _history_ref(h) {}
 
 void arrow_up_key_action::execute(std::string& current){
-	//current = _history_ref.get_current();
-	//_history_ref.move_back();
 	current = _history_ref.get_previous();
 }
 
 arrow_down_key_action::arrow_down_key_action(history& h) : _history_ref(h) {}
 
 void arrow_down_key_action::execute(std::string& current){
-	//_history_ref.move_next();
-	//current = _history_ref.get_current();
 	current = _history_ref.get_next();
 }
 
@@ -48,7 +44,6 @@ void backspace_action::execute(std::string& current){
 tab_action::tab_action(tab_completion& _tab_ref, bool _double_tab) : _tab_ref(_tab_ref), _double_tab(_double_tab) {}
 
 void tab_action::execute(std::string& current){
-	// TODO if(_double_tab){}
 	current = _tab_ref.get_path_match(current);
 }
 
