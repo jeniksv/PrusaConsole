@@ -39,6 +39,7 @@ add_executable(
   tests
   tests/history_tests.cpp
   tests/tab_completion_tests.cpp
+  tests/parser_tests.cpp
 )
 
 target_link_libraries(

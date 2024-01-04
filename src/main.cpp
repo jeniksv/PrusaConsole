@@ -20,7 +20,7 @@ int main(int argc, char** argv){
 		
 		parser.process(line);
 
-		if(!parser.get_name()){
+		if(!parser.get_name().has_value()){
 			continue;
 		}
 		
