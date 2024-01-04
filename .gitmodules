@@ -1,6 +1,3 @@
-[submodule "cpp-terminal"]
-	path = cpp-terminal
-	url = https://github.com/jupyter-xeus/cpp-terminal.git
 [submodule "extern/googletest"]
 	path = extern/googletest
 	url = https://github.com/google/googletest.git
