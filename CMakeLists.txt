@@ -18,6 +18,7 @@ add_library(
     src/tab_completion.cpp
     src/key_actions.cpp
     src/printer.cpp
+    src/parser.cpp
 )
 
 target_link_libraries(

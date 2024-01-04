@@ -14,9 +14,9 @@ bool command::starts_with(const std::string& prefix) const{
         return std::equal(prefix.begin(), prefix.end(), _name.begin());
 }
 
-command_result command::execute(const std::vector<std::string>& params){
+command_result command::execute(const std::optional<std::vector<std::string>>& params){
 	std::cout << "DBUS action " << _name << "with arguments";
-       	for(const std::string& s : params) std::cout << s << " ";
+       	for(const std::string& s : params.value()) std::cout << s << " ";
 	std::cout << std::endl;
 
 	return command_result::OK;
@@ -34,8 +34,8 @@ bool command_comparator::operator()(const command& lhs, const command& rhs) cons
 
 help_command::help_command() : command("help") {}
 
-command_result help_command::execute(const std::vector<std::string>& args){
-	if(args.size() > 0){
+command_result help_command::execute(const std::optional<std::vector<std::string>>& args){
+	if(args){
 		return command_result::INVALID_ARGUMENTS;
 	}
 	
@@ -50,8 +50,8 @@ void help_command::help(){
 
 exit_command::exit_command() : command("exit") {}
 
-command_result exit_command::execute(const std::vector<std::string>& args){
-	if(args.size() > 0){
+command_result exit_command::execute(const std::optional<std::vector<std::string>>& args){
+	if(args){
 		return command_result::INVALID_ARGUMENTS;	
 	}
 
