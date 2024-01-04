@@ -18,6 +18,7 @@ add_library(
     src/tab_completion.cpp
     src/key_actions.cpp
     src/printer.cpp
+    src/parser.cpp
 )
 
 target_link_libraries(
@@ -38,6 +39,7 @@ add_executable(
   tests
   tests/history_tests.cpp
   tests/tab_completion_tests.cpp
+  tests/parser_tests.cpp
 )
 
 target_link_libraries(

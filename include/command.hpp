@@ -2,7 +2,9 @@
 #define COMMAND_H_
 
 #include <string>
+#include <vector>
 #include <algorithm>
+#include <optional>
 
 enum class command_result{
 	OK,
@@ -22,7 +24,7 @@ public:
 	bool starts_with(const std::string&) const;
 
 	// TODO start using std::optional<std::vector<std::string>&>
-	virtual command_result execute(const std::vector<std::string>&); // = 0; TODO make pure virtual, also vector can be const
+	virtual command_result execute(const std::optional<std::vector<std::string>>&); // = 0; TODO make pure virtual, also vector can be const
 
 	virtual void help();
 protected:
@@ -39,7 +41,7 @@ class exit_command : public command{
 public:
 	exit_command();
 
-	command_result execute(const std::vector<std::string>&) override;
+	command_result execute(const std::optional<std::vector<std::string>>&) override;
 
 	void help() override;
 };
@@ -50,7 +52,7 @@ class help_command : public command{
 public:
 	help_command();
 
-	command_result execute(const std::vector<std::string>&) override;
+	command_result execute(const std::optional<std::vector<std::string>>&) override;
 
 	void help() override;
 };
@@ -58,13 +60,13 @@ public:
 
 class start_print_command : public command{
 public:
-	command_result execute(const std::vector<std::string>&) override;	
+	command_result execute(const std::optional<std::vector<std::string>>&) override;	
 };
 
 
 class stop_print_command : public command{
 public:
-	command_result execute(const std::vector<std::string>&) override;
+	command_result execute(const std::optional<std::vector<std::string>>&) override;
 };
 
 #endif
