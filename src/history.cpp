@@ -76,7 +76,11 @@ std::string history::get_next() {
 		return "";
 	}
 
-	return _current_commands[++_current_index];
+	if(++_current_index == static_cast<int>(_current_commands.size())){
+		return "";
+	}
+
+	return _current_commands[_current_index];
 }
 
 std::string history::get_previous() {

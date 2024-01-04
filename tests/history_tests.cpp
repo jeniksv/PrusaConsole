@@ -86,7 +86,7 @@ TEST_F(HistoryTest, GetNextAndPrevious) {
 	}
 
 	for(size_t i = 0; i < static_cast<int>(commands.size()) + 10; ++i){
-		std::string expected = i < commands.size() - 1 ? commands[i + 1] : "";
+		std::string expected = i < static_cast<int>(commands.size()) - 1 ? commands[i + 1] : "";
 		ASSERT_EQ(history_ptr->get_next(), expected);
 	}
 }
