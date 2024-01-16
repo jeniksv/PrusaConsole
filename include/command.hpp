@@ -23,7 +23,6 @@ public:
 
 	bool starts_with(const std::string&) const;
 
-	// TODO start using std::optional<std::vector<std::string>&>
 	virtual command_result execute(const std::optional<std::vector<std::string>>&); // = 0; TODO make pure virtual, also vector can be const
 
 	virtual void help();

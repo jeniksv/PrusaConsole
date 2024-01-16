@@ -18,7 +18,6 @@ public:
 private:
 	std::optional<std::string> _name;
 	std::optional<std::vector<std::string>> _args;
-	
 };
 
 #endif

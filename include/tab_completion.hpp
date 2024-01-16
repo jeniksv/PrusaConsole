@@ -9,7 +9,7 @@
 
 #include "command.hpp"
 
-// TODO more complex -> each command should have specified aruments, which can be completed
+
 class tab_completion {
 public:
 	tab_completion();

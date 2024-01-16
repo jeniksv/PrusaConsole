@@ -38,7 +38,7 @@ TEST_F(HistoryTest, AddAndGetCommands) {
 	ASSERT_EQ(history_ptr->get_current(), "");
 }
 
-TEST_F(HistoryTest, MoveNextAndBackAnd) {
+TEST_F(HistoryTest, MoveNextAndBack) {
 	for(const std::string& s : commands){
 		history_ptr->add(s);
 	}
@@ -71,7 +71,7 @@ TEST_F(HistoryTest, GetNextAndPrevious) {
 		history_ptr->add(s);
 	}
 
-	if(commands.size() < 4) return;
+	ASSERT_GE(commands.size(), 4);
 
 	ASSERT_EQ(history_ptr->get_previous(), commands[static_cast<int>(commands.size()) - 1]);
 	ASSERT_EQ(history_ptr->get_previous(), commands[static_cast<int>(commands.size()) - 2]);

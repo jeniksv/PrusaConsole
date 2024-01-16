@@ -1,2 +1,2 @@
-// TODO create users input mock
+// TODO mock function from cpp-terminal read_event 
 // maybe another thread 

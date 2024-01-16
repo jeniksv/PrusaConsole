@@ -34,6 +34,9 @@ int main(int argc, char** argv){
 			break;
 		}
 		
-		p.get_action(parser.get_name().value())->execute(parser.get_arguments());
+		auto& action = p.get_action(parser.get_name().value());
+		auto& result = action->execute(parser.get_arguments());
+
+		//Term::cout << result << std::endl;
 	}
 }
