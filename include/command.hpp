@@ -10,6 +10,7 @@ enum class command_result{
 	OK,
 	INVALID_ARGUMENTS,
 	UNKNOWN_COMMAND,
+	NOT_IMPLEMENTED,
 };
 
 
@@ -38,7 +39,7 @@ struct command_comparator{
 
 class exit_command : public command{
 public:
-	exit_command();
+	exit_command(std::string);
 
 	command_result execute(const std::optional<std::vector<std::string>>&) override;
 
@@ -49,7 +50,7 @@ public:
 // muze byt friend na printer class aby vedel o vsech commandech
 class help_command : public command{
 public:
-	help_command();
+	help_command(std::string);
 
 	command_result execute(const std::optional<std::vector<std::string>>&) override;
 
@@ -65,6 +66,14 @@ public:
 
 class stop_print_command : public command{
 public:
+	command_result execute(const std::optional<std::vector<std::string>>&) override;
+};
+
+
+class default_command : public command{
+public:
+	default_command(std::string);
+
 	command_result execute(const std::optional<std::vector<std::string>>&) override;
 };
 

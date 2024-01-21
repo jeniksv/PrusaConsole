@@ -24,7 +24,6 @@ bool printer::valid_command(const std::string& command){
 
 
 std::unique_ptr<command>& printer::get_action(const std::string& command){
-	//return _commands.find(command)->second;
 	auto itr = _commands.find(command);
 
 	if(itr != _commands.end()){
@@ -46,8 +45,11 @@ void printer::build(const std::string& printer_type){
 	}
 	
 	if(printer_type == "sl2"){
-		add_command("help", std::move(std::make_unique<help_command>()));
-		add_command("exit", std::move(std::make_unique<exit_command>()));
+		add_command("help", std::move(std::make_unique<help_command>(help_command("help"))));
+		add_command("exit", std::move(std::make_unique<exit_command>(exit_command("exit"))));
+		add_command("set_tower_position", std::move(std::make_unique<default_command>(default_command("set_tower_position"))));
+		add_command("set_pump_position", std::move(std::make_unique<default_command>(default_command("set_pump_position"))));
+		add_command("set_tilt_position", std::move(std::make_unique<default_command>(default_command("set_tilt_position"))));
 		return;
 	}
 

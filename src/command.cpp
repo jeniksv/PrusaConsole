@@ -32,7 +32,7 @@ bool command_comparator::operator()(const command& lhs, const command& rhs) cons
 
 
 
-help_command::help_command() : command("help") {}
+help_command::help_command(std::string name) : command(name) {}
 
 command_result help_command::execute(const std::optional<std::vector<std::string>>& args){
 	if(args){
@@ -48,17 +48,24 @@ void help_command::help(){
 }
 
 
-exit_command::exit_command() : command("exit") {}
+exit_command::exit_command(std::string name) : command(name) {}
 
 command_result exit_command::execute(const std::optional<std::vector<std::string>>& args){
 	if(args){
 		return command_result::INVALID_ARGUMENTS;	
 	}
 
-	std::cout << "exit_command exexcute" << std::endl;
+	std::cout << "exit_command execute" << std::endl;
 	return command_result::OK;
 }
 
 void exit_command::help(){
 	std::cout << "exits application" << std::endl;
+}
+
+default_command::default_command(std::string name) : command(name) {}
+
+command_result default_command::execute(const std::optional<std::vector<std::string>>& args){
+	std::cout << get_name() << " executed" << std::endl;
+	return command_result::NOT_IMPLEMENTED;	
 }
