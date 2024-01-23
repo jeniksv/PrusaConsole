@@ -98,12 +98,13 @@ public:
 
 class enter_action : public key_action_base{
 public:
-	enter_action(history&, printer&);
+	enter_action(history&, printer&, command_parser&);
 
 	void execute(std::string&) override;
 private:
 	history& _history_ref;
 	printer& _printer_ref;
+	command_parser& _parser_ref;
 };
 
 

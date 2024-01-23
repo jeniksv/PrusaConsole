@@ -17,7 +17,7 @@ std::unique_ptr<key_action_base> key_action_factory::get_action(const Term::Key&
 	if(key_type == Term::Key::Backspace) return std::make_unique<backspace_action>();
 	if(key_type == Term::Key::Space) return std::make_unique<space_action>();
 	if(key_type == Term::Key::Tab) return std::make_unique<tab_action>(tab_action(_tab_ref, false));
-	if(key_type == Term::Key::Enter) return std::make_unique<enter_action>(enter_action(_history_ref, _printer_ref));
+	if(key_type == Term::Key::Enter) return std::make_unique<enter_action>(enter_action(_history_ref, _printer_ref, _parser_ref));
 
 	if(key_type == Term::Key::Ctrl_C) return std::make_unique<ctrl_c_action>();
 
@@ -53,7 +53,10 @@ void space_action::execute(std::string& current){
 }
 
 
-enter_action::enter_action(history& _history_ref, printer& _printer_ref) : _history_ref(_history_ref), _printer_ref(_printer_ref) {}
+enter_action::enter_action(history& _history_ref, printer& _printer_ref, command_parser& _parser_ref) :
+	_history_ref(_history_ref),
+	_printer_ref(_printer_ref),
+	_parser_ref(_parser_ref) {}
 
 void enter_action::execute(std::string& current){
 	_history_ref.add(current);
