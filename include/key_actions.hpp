@@ -5,6 +5,7 @@
 
 #include "history.hpp"
 #include "tab_completion.hpp"
+#include "printer.hpp"
 #include "cpp-terminal/key.hpp"
 
 
@@ -18,13 +19,14 @@ public:
 
 class key_action_factory{
 public:
-	key_action_factory(history&, tab_completion&);
+	key_action_factory(history&, tab_completion&, printer&);
 
 	std::unique_ptr<key_action_base> get_action(const Term::Key&);
 private:
 	// Term::Key _previous_key;
 	history& _history_ref;
 	tab_completion& _tab_ref;
+	printer& _printer_ref;
 };
 
 
@@ -94,11 +96,12 @@ public:
 
 class enter_action : public key_action_base{
 public:
-	enter_action(history&);
+	enter_action(history&, printer&);
 
 	void execute(std::string&) override;
 private:
 	history& _history_ref;
+	printer& _printer_ref;
 };
 
 

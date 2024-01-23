@@ -5,18 +5,15 @@
 #include "tab_completion.hpp"
 #include "history.hpp"
 #include "cli.hpp"
-#include "printer.hpp"
 #include "parser.hpp"
 
 
 int main(int argc, char** argv){
-	printer p;
-
-	cli reader;
+	cli _cli;
 	command_parser parser;
 	
 	while(true){
-		std::string line = reader.mainloop();
+		std::string line = _cli.mainloop();
 		
 		parser.process(line);
 
