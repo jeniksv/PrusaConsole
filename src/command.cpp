@@ -31,7 +31,6 @@ bool command_comparator::operator()(const command& lhs, const command& rhs) cons
 }
 
 
-
 help_command::help_command(std::string name) : command(name) {}
 
 command_result help_command::execute(const std::optional<std::vector<std::string>>& args){
@@ -56,12 +55,13 @@ command_result exit_command::execute(const std::optional<std::vector<std::string
 	}
 
 	std::cout << "exit_command execute" << std::endl;
-	return command_result::OK;
+	return command_result::EXIT;
 }
 
 void exit_command::help(){
 	std::cout << "exits application" << std::endl;
 }
+
 
 default_command::default_command(std::string name) : command(name) {}
 

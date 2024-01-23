@@ -27,29 +27,37 @@ std::unique_ptr<key_action_base> key_action_factory::get_action(const Term::Key&
 
 arrow_up_key_action::arrow_up_key_action(history& h) : _history_ref(h) {}
 
-void arrow_up_key_action::execute(std::string& current){
+key_action_result arrow_up_key_action::execute(std::string& current){
 	current = _history_ref.get_previous();
+	return key_action_result::OK;
 }
+
 
 arrow_down_key_action::arrow_down_key_action(history& h) : _history_ref(h) {}
 
-void arrow_down_key_action::execute(std::string& current){
+key_action_result arrow_down_key_action::execute(std::string& current){
 	current = _history_ref.get_next();
+	return key_action_result::OK;
 }
 
-void backspace_action::execute(std::string& current){
+
+key_action_result backspace_action::execute(std::string& current){
 	current = current.empty() ? "" : current.substr(0, current.size() - 1);
+	return key_action_result::OK;
 }
 
 
 tab_action::tab_action(tab_completion& _tab_ref, bool _double_tab) : _tab_ref(_tab_ref), _double_tab(_double_tab) {}
 
-void tab_action::execute(std::string& current){
+key_action_result tab_action::execute(std::string& current){
 	current = _tab_ref.get_path_match(current);
+	return key_action_result::OK;
 }
 
-void space_action::execute(std::string& current){
+
+key_action_result space_action::execute(std::string& current){
 	current.append(" ");
+	return key_action_result::OK;
 }
 
 
@@ -58,22 +66,43 @@ enter_action::enter_action(history& _history_ref, printer& _printer_ref, command
 	_printer_ref(_printer_ref),
 	_parser_ref(_parser_ref) {}
 
-void enter_action::execute(std::string& current){
-	_history_ref.add(current);
+key_action_result enter_action::execute(std::string& current){
 	current.append("\n");
+	_history_ref.add(current);
+	_parser_ref.process(current);
+
+	if(!_parser_ref.get_name().has_value()){
+		return key_action_result::RESET;
+	}
+
+	if(!_printer_ref.valid_command(_parser_ref.get_name().value())){
+		return key_action_result::RESET; // TODO invalid command
+	}
+
+	std::cout << "debug" << std::endl;
+
+	auto& dbus_request = _printer_ref.get_action(_parser_ref.get_name().value());
+	std::cout << "debug" << std::endl;
+	auto result = dbus_request->execute(_parser_ref.get_arguments());
+
+	return result == command_result::EXIT ? key_action_result::EXIT : key_action_result::RESET; // TODO when exit_command -> return EXIT
 }
 
-void ctrl_c_action::execute(std::string& current){
+
+key_action_result ctrl_c_action::execute(std::string& current){
 	// TODO invalid pointers
-	exit(0);
+	return key_action_result::EXIT;
 }
 
 
 default_action::default_action(std::string k) : _key_name(k) {}
 
-void default_action::execute(std::string& current){
+key_action_result default_action::execute(std::string& current){
 	current.append(_key_name);
+	return key_action_result::OK;
 }
 
 
-void no_action::execute(std::string& current){}
+key_action_result no_action::execute(std::string& current){
+	return key_action_result::OK;
+}

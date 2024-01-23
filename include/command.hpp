@@ -6,11 +6,13 @@
 #include <algorithm>
 #include <optional>
 
+
 enum class command_result{
 	OK,
 	INVALID_ARGUMENTS,
 	UNKNOWN_COMMAND,
 	NOT_IMPLEMENTED,
+	EXIT,
 };
 
 

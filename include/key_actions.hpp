@@ -8,13 +8,22 @@
 #include "printer.hpp"
 #include "parser.hpp"
 #include "cpp-terminal/key.hpp"
+#include "cpp-terminal/terminal.hpp"
+#include "cpp-terminal/iostream.hpp"
+
+
+enum class key_action_result{
+	OK,
+	RESET,
+	EXIT,
+};
 
 
 class key_action_base{
 public:
         virtual ~key_action_base();
 
-        virtual void execute(std::string&) = 0;
+        virtual key_action_result execute(std::string&) = 0;
 };
 
 
@@ -36,7 +45,7 @@ class arrow_up_key_action : public key_action_base{
 public:
 	arrow_up_key_action(history&);
 
-	void execute(std::string&) override;
+	key_action_result execute(std::string&) override;
 private:
 	history& _history_ref;
 };
@@ -46,7 +55,7 @@ class arrow_down_key_action : public key_action_base{
 public:
         arrow_down_key_action(history&);
 
-        void execute(std::string&) override;
+        key_action_result execute(std::string&) override;
 private:
 	history& _history_ref;
 };
@@ -56,7 +65,7 @@ class arrow_left_key_action : public key_action_base{
 public:
         arrow_left_key_action(history&);
 
-        void execute(std::string&) override;
+        key_action_result execute(std::string&) override;
 private:
 	history& _history_ref;
 };
@@ -66,7 +75,7 @@ class arrow_right_key_action : public key_action_base{
 public:
         arrow_right_key_action(history&);
 
-        void execute(std::string&) override;
+        key_action_result execute(std::string&) override;
 private:
 	history& _history_ref;
 };
@@ -76,7 +85,7 @@ class tab_action : public key_action_base{
 public:
 	tab_action(tab_completion&, bool); // TODO can be const?
 
-	void execute(std::string&) override;
+	key_action_result execute(std::string&) override;
 private:
 	tab_completion& _tab_ref;
 
@@ -86,13 +95,13 @@ private:
 
 class backspace_action : public key_action_base{
 public:
-	void execute(std::string&) override;
+	key_action_result execute(std::string&) override;
 };
 
 
 class space_action : public key_action_base{
 public:
-	void execute(std::string&) override;
+	key_action_result execute(std::string&) override;
 };
 
 
@@ -100,7 +109,7 @@ class enter_action : public key_action_base{
 public:
 	enter_action(history&, printer&, command_parser&);
 
-	void execute(std::string&) override;
+	key_action_result execute(std::string&) override;
 private:
 	history& _history_ref;
 	printer& _printer_ref;
@@ -110,7 +119,7 @@ private:
 
 class ctrl_c_action : public key_action_base{
 public:
-	void execute(std::string&) override;
+	key_action_result execute(std::string&) override;
 };
 
 
@@ -118,7 +127,7 @@ class default_action : public key_action_base{
 public:
 	default_action(std::string);
 
-	void execute(std::string&) override;
+	key_action_result execute(std::string&) override;
 private:
 	std::string _key_name;
 };
@@ -126,7 +135,7 @@ private:
 
 class no_action : public key_action_base{
 public:
-	void execute(std::string&) override;
+	key_action_result execute(std::string&) override;
 };
 
 #endif

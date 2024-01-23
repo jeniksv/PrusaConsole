@@ -7,30 +7,4 @@
 int main(int argc, char** argv){
 	cli _cli;
 	_cli.mainloop();
-	/*	
-	while(true){
-		std::string line = _cli.mainloop();
-		
-		parser.process(line);
-
-		if(!parser.get_name().has_value()){
-			continue;
-		}
-		
-		if(!p.valid_command(parser.get_name().value())){
-			Term::cout << "Invalid command" << std::endl;
-			continue;
-		}
-
-		// TODO get rid of =, this should be handled by exit_command
-		if(parser.get_name() == "exit"){
-			break;
-		}
-		
-		auto& action = p.get_action(parser.get_name().value());
-		auto result = action->execute(parser.get_arguments());
-
-		//Term::cout << result << std::endl;
-	}
-	*/
 }
