@@ -67,25 +67,30 @@ enter_action::enter_action(history& _history_ref, printer& _printer_ref, command
 	_parser_ref(_parser_ref) {}
 
 key_action_result enter_action::execute(std::string& current){
+	if(!current.empty()){
+		_history_ref.add(current);
+	}
 	current.append("\n");
-	_history_ref.add(current);
+	return key_action_result::COMMAND_READY;
+	/*
 	_parser_ref.process(current);
 
 	if(!_parser_ref.get_name().has_value()){
 		return key_action_result::RESET;
 	}
 
+	_history_ref.add(current);
+
 	if(!_printer_ref.valid_command(_parser_ref.get_name().value())){
 		return key_action_result::RESET; // TODO invalid command
 	}
 
-	std::cout << "debug" << std::endl;
-
+	// rename to get_command
 	auto& dbus_request = _printer_ref.get_action(_parser_ref.get_name().value());
-	std::cout << "debug" << std::endl;
 	auto result = dbus_request->execute(_parser_ref.get_arguments());
 
 	return result == command_result::EXIT ? key_action_result::EXIT : key_action_result::RESET; // TODO when exit_command -> return EXIT
+	*/
 }
 
 

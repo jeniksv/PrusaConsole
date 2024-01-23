@@ -1,5 +1,5 @@
 #include "command.hpp"
-#include <iostream>
+#include "cpp-terminal/iostream.hpp"
 
 
 command::command(const std::string& _name) : _name(_name) {}
@@ -15,15 +15,15 @@ bool command::starts_with(const std::string& prefix) const{
 }
 
 command_result command::execute(const std::optional<std::vector<std::string>>& params){
-	std::cout << "DBUS action " << _name << "with arguments";
-       	for(const std::string& s : params.value()) std::cout << s << " ";
-	std::cout << std::endl;
+	Term::cout << "DBUS action " << _name << "with arguments";
+       	for(const std::string& s : params.value()) Term::cout << s << " ";
+	Term::cout << std::endl;
 
 	return command_result::OK;
 }
 
 void command::help(){
-	std::cout << "Commands has no help text." << std::endl;
+	Term::cout << "Commands has no help text." << std::endl;
 }
 
 bool command_comparator::operator()(const command& lhs, const command& rhs) const{
@@ -38,12 +38,12 @@ command_result help_command::execute(const std::optional<std::vector<std::string
 		return command_result::INVALID_ARGUMENTS;
 	}
 	
-	std::cout << "help_command execute" << std::endl;
+	Term::cout << "help_command execute" << std::endl;
 	return command_result::OK;
 }
 
 void help_command::help(){
-	std::cout << "lists all commands and their usage" << std::endl;
+	Term::cout << "lists all commands and their usage" << std::endl;
 }
 
 
@@ -54,18 +54,18 @@ command_result exit_command::execute(const std::optional<std::vector<std::string
 		return command_result::INVALID_ARGUMENTS;	
 	}
 
-	std::cout << "exit_command execute" << std::endl;
+	// Term::cout << "exit_command execute" << std::endl;
 	return command_result::EXIT;
 }
 
 void exit_command::help(){
-	std::cout << "exits application" << std::endl;
+	Term::cout << "exits application" << std::endl;
 }
 
 
 default_command::default_command(std::string name) : command(name) {}
 
 command_result default_command::execute(const std::optional<std::vector<std::string>>& args){
-	std::cout << get_name() << " executed" << std::endl;
+	Term::cout << get_name() << " executed" << std::endl;
 	return command_result::NOT_IMPLEMENTED;	
 }

@@ -8,14 +8,15 @@
 #include "printer.hpp"
 #include "parser.hpp"
 #include "cpp-terminal/key.hpp"
-#include "cpp-terminal/terminal.hpp"
 #include "cpp-terminal/iostream.hpp"
 
 
 enum class key_action_result{
 	OK,
 	RESET,
+	SOFT_RESET,
 	EXIT,
+	COMMAND_READY,
 };
 
 
