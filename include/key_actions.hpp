@@ -12,10 +12,7 @@
 
 
 enum class key_action_result{
-	OK,
-	RESET,
-	SOFT_RESET,
-	EXIT,
+	COMMAND_NOT_READY,
 	COMMAND_READY,
 };
 
@@ -30,11 +27,12 @@ public:
 
 class key_action_factory{
 public:
-	key_action_factory(history&, tab_completion&, printer&, command_parser&);
+	key_action_factory(bool&, history&, tab_completion&, printer&, command_parser&);
 
 	std::unique_ptr<key_action_base> get_action(const Term::Key&);
 private:
 	// Term::Key _previous_key;
+	bool& _running_ref;
 	history& _history_ref;
 	tab_completion& _tab_ref;
 	printer& _printer_ref;
@@ -120,7 +118,11 @@ private:
 
 class ctrl_c_action : public key_action_base{
 public:
+	ctrl_c_action(bool&); 
+
 	key_action_result execute(std::string&) override;
+private:
+	bool& _running_ref;
 };
 
 

@@ -2,7 +2,8 @@
 
 key_action_base::~key_action_base(){}
 
-key_action_factory::key_action_factory(history& _history_ref, tab_completion& _tab_ref, printer& _printer_ref, command_parser& _parser_ref) :
+key_action_factory::key_action_factory(bool& _running_ref, history& _history_ref, tab_completion& _tab_ref, printer& _printer_ref, command_parser& _parser_ref) :
+	_running_ref(_running_ref),
 	_history_ref(_history_ref),
 	_tab_ref(_tab_ref),
 	_printer_ref(_printer_ref),
@@ -19,7 +20,7 @@ std::unique_ptr<key_action_base> key_action_factory::get_action(const Term::Key&
 	if(key_type == Term::Key::Tab) return std::make_unique<tab_action>(tab_action(_tab_ref, false));
 	if(key_type == Term::Key::Enter) return std::make_unique<enter_action>(enter_action(_history_ref, _printer_ref, _parser_ref));
 
-	if(key_type == Term::Key::Ctrl_C) return std::make_unique<ctrl_c_action>();
+	if(key_type == Term::Key::Ctrl_C) return std::make_unique<ctrl_c_action>(ctrl_c_action(_running_ref));
 
 	return std::make_unique<default_action>(default_action(key_type.name()));
 }
@@ -29,7 +30,7 @@ arrow_up_key_action::arrow_up_key_action(history& h) : _history_ref(h) {}
 
 key_action_result arrow_up_key_action::execute(std::string& current){
 	current = _history_ref.get_previous();
-	return key_action_result::OK;
+	return key_action_result::COMMAND_NOT_READY;
 }
 
 
@@ -37,13 +38,13 @@ arrow_down_key_action::arrow_down_key_action(history& h) : _history_ref(h) {}
 
 key_action_result arrow_down_key_action::execute(std::string& current){
 	current = _history_ref.get_next();
-	return key_action_result::OK;
+	return key_action_result::COMMAND_NOT_READY;
 }
 
 
 key_action_result backspace_action::execute(std::string& current){
 	current = current.empty() ? "" : current.substr(0, current.size() - 1);
-	return key_action_result::OK;
+	return key_action_result::COMMAND_NOT_READY;
 }
 
 
@@ -51,13 +52,13 @@ tab_action::tab_action(tab_completion& _tab_ref, bool _double_tab) : _tab_ref(_t
 
 key_action_result tab_action::execute(std::string& current){
 	current = _tab_ref.get_path_match(current);
-	return key_action_result::OK;
+	return key_action_result::COMMAND_NOT_READY;
 }
 
 
 key_action_result space_action::execute(std::string& current){
 	current.append(" ");
-	return key_action_result::OK;
+	return key_action_result::COMMAND_NOT_READY;
 }
 
 
@@ -70,6 +71,7 @@ key_action_result enter_action::execute(std::string& current){
 	if(!current.empty()){
 		_history_ref.add(current);
 	}
+
 	current.append("\n");
 	return key_action_result::COMMAND_READY;
 	/*
@@ -94,9 +96,13 @@ key_action_result enter_action::execute(std::string& current){
 }
 
 
+ctrl_c_action::ctrl_c_action(bool& _running_ref) : _running_ref(_running_ref) {}  
+
 key_action_result ctrl_c_action::execute(std::string& current){
+	_running_ref = false;
+	return key_action_result::COMMAND_NOT_READY;
 	// TODO invalid pointers
-	return key_action_result::EXIT;
+	// return key_action_result::EXIT;
 }
 
 
@@ -104,10 +110,10 @@ default_action::default_action(std::string k) : _key_name(k) {}
 
 key_action_result default_action::execute(std::string& current){
 	current.append(_key_name);
-	return key_action_result::OK;
+	return key_action_result::COMMAND_NOT_READY;
 }
 
 
 key_action_result no_action::execute(std::string& current){
-	return key_action_result::OK;
+	return key_action_result::COMMAND_NOT_READY;
 }
