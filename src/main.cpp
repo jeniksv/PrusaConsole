@@ -1,17 +1,13 @@
 #include <string>
 #include <optional>
 
-#include "command.hpp"
-#include "tab_completion.hpp"
-#include "history.hpp"
 #include "cli.hpp"
-#include "parser.hpp"
 
 
 int main(int argc, char** argv){
 	cli _cli;
-	command_parser parser;
-	
+	_cli.mainloop();
+	/*	
 	while(true){
 		std::string line = _cli.mainloop();
 		
@@ -36,4 +32,5 @@ int main(int argc, char** argv){
 
 		//Term::cout << result << std::endl;
 	}
+	*/
 }
