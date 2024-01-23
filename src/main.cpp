@@ -4,7 +4,7 @@
 #include "command.hpp"
 #include "tab_completion.hpp"
 #include "history.hpp"
-#include "console_reader.hpp"
+#include "cli.hpp"
 #include "printer.hpp"
 #include "parser.hpp"
 
@@ -12,11 +12,11 @@
 int main(int argc, char** argv){
 	printer p;
 
-	console_reader reader;
+	cli reader;
 	command_parser parser;
 	
 	while(true){
-		std::string line = reader.read_line();
+		std::string line = reader.mainloop();
 		
 		parser.process(line);
 
