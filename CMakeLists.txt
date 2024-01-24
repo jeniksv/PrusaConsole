@@ -12,6 +12,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(
     prusa-console-lib
     src/command.cpp
+    src/concrete_commands.cpp
     src/cli.cpp
     src/history.cpp
     src/main.cpp

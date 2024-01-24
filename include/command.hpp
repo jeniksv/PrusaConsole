@@ -38,45 +38,4 @@ struct command_comparator{
 	bool operator()(const command&, const command&) const;
 };
 
-
-class exit_command : public command{
-public:
-	exit_command(std::string);
-
-	command_result execute(const std::optional<std::vector<std::string>>&) override;
-
-	void help() override;
-};
-
-
-// muze byt friend na printer class aby vedel o vsech commandech
-class help_command : public command{
-public:
-	help_command(std::string);
-
-	command_result execute(const std::optional<std::vector<std::string>>&) override;
-
-	void help() override;
-};
-
-
-class start_print_command : public command{
-public:
-	command_result execute(const std::optional<std::vector<std::string>>&) override;	
-};
-
-
-class stop_print_command : public command{
-public:
-	command_result execute(const std::optional<std::vector<std::string>>&) override;
-};
-
-
-class default_command : public command{
-public:
-	default_command(std::string);
-
-	command_result execute(const std::optional<std::vector<std::string>>&) override;
-};
-
 #endif

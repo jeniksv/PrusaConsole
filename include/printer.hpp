@@ -8,6 +8,7 @@
 #include <map>
 
 #include "command.hpp"
+#include "concrete_commands.hpp"
 
 
 // printer is defined by name and set of commands
