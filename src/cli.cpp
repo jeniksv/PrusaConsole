@@ -61,10 +61,8 @@ void cli::mainloop(){
 
 		Term::Key key(event);
 
-		clear_line(_current_line);
 		auto action = _key_action_factory.get_action(key);
 		auto action_result = action->execute(_current_line);
-		write_line(_current_line);
 	
 		if(action_result == key_action_result::COMMAND_READY){
 			process_command();

@@ -29,7 +29,14 @@ std::unique_ptr<key_action_base> key_action_factory::get_action(const Term::Key&
 arrow_up_key_action::arrow_up_key_action(history& h) : _history_ref(h) {}
 
 key_action_result arrow_up_key_action::execute(std::string& current){
+	for(int i=0; i < current.length(); ++i){
+		Term::cout << "\b \b" << std::flush;
+	}
+
 	current = _history_ref.get_previous();
+
+	Term::cout << current << std::flush;
+
 	return key_action_result::COMMAND_NOT_READY;
 }
 
@@ -37,13 +44,24 @@ key_action_result arrow_up_key_action::execute(std::string& current){
 arrow_down_key_action::arrow_down_key_action(history& h) : _history_ref(h) {}
 
 key_action_result arrow_down_key_action::execute(std::string& current){
+	for(int i=0; i < current.length(); ++i){
+		Term::cout << "\b \b" << std::flush;
+	}
+	
 	current = _history_ref.get_next();
+	Term::cout << current << std::flush;
+
 	return key_action_result::COMMAND_NOT_READY;
 }
 
 
 key_action_result backspace_action::execute(std::string& current){
+	if(!current.empty()){
+		Term::cout << "\b \b" << std::flush;
+	}
+	
 	current = current.empty() ? "" : current.substr(0, current.size() - 1);
+
 	return key_action_result::COMMAND_NOT_READY;
 }
 
@@ -51,13 +69,21 @@ key_action_result backspace_action::execute(std::string& current){
 tab_action::tab_action(tab_completion& _tab_ref, bool _double_tab) : _tab_ref(_tab_ref), _double_tab(_double_tab) {}
 
 key_action_result tab_action::execute(std::string& current){
+	for(int i=0; i < current.length(); ++i){
+		Term::cout << "\b \b" << std::flush;
+	}
+	
 	current = _tab_ref.get_path_match(current);
+	Term::cout << current << std::flush;
+
 	return key_action_result::COMMAND_NOT_READY;
 }
 
 
 key_action_result space_action::execute(std::string& current){
 	current.append(" ");
+	Term::cout << " " << std::flush;
+
 	return key_action_result::COMMAND_NOT_READY;
 }
 
@@ -73,6 +99,7 @@ key_action_result enter_action::execute(std::string& current){
 	}
 
 	current.append("\n");
+	Term::cout << std::endl;
 	return key_action_result::COMMAND_READY;
 	/*
 	_parser_ref.process(current);
@@ -110,6 +137,7 @@ default_action::default_action(std::string k) : _key_name(k) {}
 
 key_action_result default_action::execute(std::string& current){
 	current.append(_key_name);
+	Term::cout << _key_name << std::flush;
 	return key_action_result::COMMAND_NOT_READY;
 }
 
