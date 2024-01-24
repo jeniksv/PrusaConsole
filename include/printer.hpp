@@ -22,7 +22,7 @@ public:
 
 	bool valid_command(const std::string&);
 
-	std::unique_ptr<command>& get_action(const std::string&); 
+	std::unique_ptr<command>& get_command(const std::string&); 
 private:
 	void add_command(const std::string&, std::unique_ptr<command>);
 

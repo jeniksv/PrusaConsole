@@ -7,24 +7,15 @@
 #include "tab_completion.hpp"
 #include "printer.hpp"
 #include "parser.hpp"
+#include "command.hpp"
 #include "cpp-terminal/key.hpp"
 #include "cpp-terminal/iostream.hpp"
-
-#include "cpp-terminal/cursor.hpp"
-#include "cpp-terminal/exception.hpp"
-#include "cpp-terminal/input.hpp"
-#include "cpp-terminal/iostream.hpp"
-#include "cpp-terminal/key.hpp"
-#include "cpp-terminal/options.hpp"
-#include "cpp-terminal/screen.hpp"
-#include "cpp-terminal/terminal.hpp"
-#include "cpp-terminal/tty.hpp"
-#include "cpp-terminal/version.hpp"
 
 
 enum class key_action_result{
-	COMMAND_NOT_READY,
-	COMMAND_READY,
+	CONTINUE,
+	CONTINUE_WITH_RESET,
+	EXIT,
 };
 
 
@@ -38,12 +29,13 @@ public:
 
 class key_action_factory{
 public:
-	key_action_factory(bool&, history&, tab_completion&, printer&, command_parser&);
+	key_action_factory(history&, tab_completion&, printer&, command_parser&);
 
 	std::unique_ptr<key_action_base> get_action(const Term::Key&);
+
+	void reset();
 private:
 	// Term::Key _previous_key;
-	bool& _running_ref;
 	history& _history_ref;
 	tab_completion& _tab_ref;
 	printer& _printer_ref;
@@ -121,6 +113,8 @@ public:
 
 	key_action_result execute(std::string&) override;
 private:
+	command_result process_command(const std::string&);
+
 	history& _history_ref;
 	printer& _printer_ref;
 	command_parser& _parser_ref;
@@ -129,11 +123,7 @@ private:
 
 class ctrl_c_action : public key_action_base{
 public:
-	ctrl_c_action(bool&); 
-
 	key_action_result execute(std::string&) override;
-private:
-	bool& _running_ref;
 };
 
 

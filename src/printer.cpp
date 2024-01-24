@@ -23,7 +23,7 @@ bool printer::valid_command(const std::string& command){
 }
 
 
-std::unique_ptr<command>& printer::get_action(const std::string& command){
+std::unique_ptr<command>& printer::get_command(const std::string& command){
 	auto itr = _commands.find(command);
 
 	if(itr != _commands.end()){
