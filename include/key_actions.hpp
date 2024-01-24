@@ -35,7 +35,7 @@ public:
 
 	void reset();
 private:
-	// Term::Key _previous_key;
+	Term::Key _previous_key;
 	history& _history_ref;
 	tab_completion& _tab_ref;
 	printer& _printer_ref;
@@ -85,7 +85,7 @@ private:
 
 class tab_action : public key_action_base{
 public:
-	tab_action(tab_completion&, bool); // TODO can be const?
+	tab_action(tab_completion&, bool);
 
 	key_action_result execute(std::string&) override;
 private:
