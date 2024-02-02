@@ -6,7 +6,6 @@
 #include "history.hpp"
 #include "key_actions.hpp"
 #include "printer.hpp"
-#include "parser.hpp"
 
 #include "cpp-terminal/cursor.hpp"
 #include "cpp-terminal/exception.hpp"

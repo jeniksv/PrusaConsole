@@ -1,25 +1,18 @@
 #include "printer.hpp"
 #include "cpp-terminal/iostream.hpp"
 
-/*
-printer::printer() : _command_tree(), _type("sl2") {
-	build_sl2();
-	__commands = command_tree(_command_tree);
-
-}
-*/
-/*
-printer:
-	// what about _command_tree = command_tree_builder.build("type");
-
-	if(sl1):
-		command_tree_builder = 
-	if(sl2):
-		command_tree_builder = 
-*/
 
 printer::printer(){
-	build_sl2();
+	init();
+}
+
+void printer::init(){
+	_type = "sl2"; // TODO ask via dbus
+
+	if(_type == "sl2"){
+		//_command_tree = tree_build_director().construct(std::move(std::make_unique<sl2_command_tree_builder>()));
+		_command_tree = tree_build_director().construct(sl2_command_tree_builder());
+	}
 }
 
 std::string printer::get_type(){
@@ -38,6 +31,7 @@ command_result printer::dbus_request(const std::string& request){
 	return _command_tree.execute_command(request);
 }
 
+/*
 void printer::build_sl2(){
 	_command_tree = command_tree_builder()
         .add_core_commands()
@@ -74,4 +68,4 @@ void printer::build_sl2(){
             .add_concrete_command(std::make_shared<default_command>("stop"))
         .end_composite_command()
         .build();
-}
+}*/

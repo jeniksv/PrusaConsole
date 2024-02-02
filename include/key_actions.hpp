@@ -5,7 +5,6 @@
 
 #include "history.hpp"
 #include "printer.hpp"
-#include "parser.hpp"
 #include "command.hpp"
 #include "cpp-terminal/key.hpp"
 #include "cpp-terminal/iostream.hpp"

@@ -13,6 +13,7 @@ add_library(
     prusa-console-lib
     src/command.cpp
     src/command_tree.cpp
+    src/command_tree_builder.cpp
     src/concrete_commands.cpp
     src/cli.cpp
     src/history.cpp

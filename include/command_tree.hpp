@@ -40,26 +40,4 @@ private:
 };
 
 
-class command_tree_builder{
-public:
-        command_tree_builder();
-
-        command_tree_builder& add_concrete_command(std::shared_ptr<command>);
-
-        command_tree_builder& add_composite_command(const std::string&);
-
-        command_tree_builder& end_composite_command();
-
-	command_tree_builder& add_core_commands();
-
-	command_tree_builder& add_core_slx();
-
-	command_tree build();
-protected:
-        std::shared_ptr<composite_command> _root;
-        std::shared_ptr<composite_command> _current_composite;
-        std::stack<std::shared_ptr<composite_command>> _composite_stack;
-};
-
-
 #endif

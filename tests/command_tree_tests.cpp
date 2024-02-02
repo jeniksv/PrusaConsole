@@ -3,6 +3,7 @@
 // TODO #include <gmock/gmock.h>
 #include "command.hpp"
 #include "command_tree.hpp"
+#include "command_tree_builder.hpp"
 
 class concrete_command_mock : public concrete_command_base{
 public:

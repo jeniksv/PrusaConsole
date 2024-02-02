@@ -163,36 +163,3 @@ command_result command_tree::execute_command(const std::string& c){
 	
 	return _root->execute(ss);
 }
-
-
-
-command_tree_builder::command_tree_builder() : _root(std::make_shared<composite_command>()), _current_composite(_root) {}
-
-command_tree_builder& command_tree_builder::add_concrete_command(std::shared_ptr<command> c){
-	_current_composite->add_command(c);
-	return *this;
-}
-
-command_tree_builder& command_tree_builder::add_composite_command(const std::string& name){
-	auto c = std::make_shared<composite_command>(name);
-	_current_composite->add_command(c);
-	_composite_stack.push(_current_composite);
-	_current_composite = c;
-	return *this;
-}
-
-command_tree_builder& command_tree_builder::end_composite_command(){
-	_current_composite = _composite_stack.top();
-	_composite_stack.pop();
-	return *this;
-}
-
-command_tree command_tree_builder::build(){
-	return command_tree(_root);
-}
-
-command_tree_builder& command_tree_builder::add_core_commands(){
-	add_concrete_command(std::make_shared<help_command>("help", _root));
-	add_concrete_command(std::make_shared<exit_command>("exit"));
-	return *this;
-}
