@@ -17,7 +17,6 @@ add_library(
     src/cli.cpp
     src/history.cpp
     src/main.cpp
-    src/tab_completion.cpp
     src/key_actions.cpp
     src/printer.cpp
 )
@@ -39,7 +38,7 @@ subdirs(extern/googletest)
 add_executable(
   tests
   tests/history_tests.cpp
-  #tests/tab_completion_tests.cpp
+  tests/command_tree_tests.cpp
   tests/key_actions_tests.cpp
 )
 

@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "history.hpp"
-#include "tab_completion.hpp"
 #include "printer.hpp"
 #include "parser.hpp"
 #include "command.hpp"
@@ -29,7 +28,7 @@ public:
 
 class key_action_factory{
 public:
-	key_action_factory(history&, tab_completion&, printer&);
+	key_action_factory(history&, printer&);
 
 	std::unique_ptr<key_action_base> get_action(const Term::Key&);
 
@@ -37,7 +36,6 @@ public:
 private:
 	Term::Key _previous_key;
 	history& _history_ref;
-	tab_completion& _tab_ref;
 	printer& _printer_ref;
 };
 

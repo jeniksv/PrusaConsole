@@ -3,7 +3,6 @@
 
 #include <string>
 
-#include "tab_completion.hpp"
 #include "history.hpp"
 #include "key_actions.hpp"
 #include "printer.hpp"
@@ -33,7 +32,6 @@ private:
 	std::string _current_line;
 
 	history _history;
-	tab_completion _tab;
 	printer _printer;
 	key_action_factory _key_action_factory;
 };

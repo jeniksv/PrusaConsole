@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include "command.hpp"
 #include "history.hpp"
-#include "tab_completion.hpp"
 #include "key_actions.hpp"
 
 /*

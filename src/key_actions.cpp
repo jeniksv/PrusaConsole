@@ -2,10 +2,9 @@
 
 key_action_base::~key_action_base(){}
 
-key_action_factory::key_action_factory(history& _history_ref, tab_completion& _tab_ref, printer& _printer_ref) :
+key_action_factory::key_action_factory(history& _history_ref, printer& _printer_ref) :
 	_previous_key(),
 	_history_ref(_history_ref),
-	_tab_ref(_tab_ref),
 	_printer_ref(_printer_ref) {}
 
 std::unique_ptr<key_action_base> key_action_factory::get_action(const Term::Key& key_type){
