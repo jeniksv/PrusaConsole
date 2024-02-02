@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <iostream>
 // TODO use stringstream instead of std::string
-
+/*
 tab_completion::tab_completion() : _commands() {}
 
 tab_completion::tab_completion(const std::set<std::string>& commands) : _commands() {
@@ -97,4 +97,4 @@ std::string tab_completion::get_path_match(const std::string& prefix){
 
 	current_directory = current_directory == "." ? "" : current_directory.append("/");
 	return current_directory.append(longest_common_prefix(matches));
-}
+}*/

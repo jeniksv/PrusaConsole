@@ -8,29 +8,26 @@
 #include <map>
 
 #include "command.hpp"
+#include "command_tree.hpp"
 #include "concrete_commands.hpp"
 
 
-// printer is defined by name and set of commands
-// you can extended to ask via dbus for name at start of the app, so you dont need app arguments
 class printer{
 public:
 	printer();
 	
-	printer(const std::string&);
-
 	std::string get_type();
 
-	bool valid_command(const std::string&);
+	command_result dbus_request(const std::string&);
 
-	std::unique_ptr<command>& get_command(const std::string&); 
+	command_tree& get_command_tree();
 private:
-	void add_command(const std::string&, std::unique_ptr<command>);
-
 	void build(const std::string&);
+
+	void build_sl2();
 	
 	std::string _type;
-	std::map<std::string, std::unique_ptr<command>> _commands;
+	command_tree _command_tree;
 
 	friend class help_command;
 };

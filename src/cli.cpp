@@ -1,39 +1,22 @@
 #include "cli.hpp"
 
-cli::cli() : _running(true), _current_line(), _history(".prusa_console_history"), _tab(), _printer(), _parser(), _key_action_factory(_history, _tab, _printer, _parser) {
+cli::cli() : _running(true), _current_line(), _history(".prusa_console_history"), _tab(), _printer(), _key_action_factory(_history, _tab, _printer) {
 	Term::terminal.setOptions(Term::Option::NoClearScreen, Term::Option::NoSignalKeys, Term::Option::Cursor, Term::Option::Raw);
 	Term::Screen term_size{Term::screen_size()};
 	Term::Cursor cursor{Term::cursor_position()};
 }
 
 
-void cli::show_prompt(){
-	Term::cout << "> " << std::flush;
-}
-
-
-void cli::clear_line(const std::string& s){
-	for(int i=0; i < s.length(); ++i){
-		Term::cout << "\b \b";
-	}
-}
-
-
-void cli::write_line(const std::string& s){
-	Term::cout << s << std::flush;
-}
-
-
 void cli::reset_state(){
-	show_prompt();
+	Term::cout << "> " << std::flush;
 	_history.reset();
 	_current_line = "";
 }
 
 
 void cli::mainloop(){
-	show_prompt();
-	
+	reset_state();
+
 	while(_running){
 		Term::Event event = Term::read_event();
 

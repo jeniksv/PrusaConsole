@@ -27,15 +27,7 @@ public:
 
 	void mainloop();
 private:
-	void show_prompt();
-
 	void reset_state();
-
-	void clear_line(const std::string&);
-
-	void write_line(const std::string&);
-
-	void process_command();
 
 	bool _running;
 	std::string _current_line;
@@ -43,7 +35,6 @@ private:
 	history _history;
 	tab_completion _tab;
 	printer _printer;
-	command_parser _parser;
 	key_action_factory _key_action_factory;
 };
 

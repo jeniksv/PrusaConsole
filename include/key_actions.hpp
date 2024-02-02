@@ -29,7 +29,7 @@ public:
 
 class key_action_factory{
 public:
-	key_action_factory(history&, tab_completion&, printer&, command_parser&);
+	key_action_factory(history&, tab_completion&, printer&);
 
 	std::unique_ptr<key_action_base> get_action(const Term::Key&);
 
@@ -39,7 +39,6 @@ private:
 	history& _history_ref;
 	tab_completion& _tab_ref;
 	printer& _printer_ref;
-	command_parser& _parser_ref;
 };
 
 
@@ -85,12 +84,11 @@ private:
 
 class tab_action : public key_action_base{
 public:
-	tab_action(tab_completion&, bool);
+	tab_action(command_tree&, bool);
 
 	key_action_result execute(std::string&) override;
 private:
-	tab_completion& _tab_ref;
-
+	command_tree& _tree_ref;
 	bool _double_tab;
 };
 
@@ -109,15 +107,12 @@ public:
 
 class enter_action : public key_action_base{
 public:
-	enter_action(history&, printer&, command_parser&);
+	enter_action(history&, printer&);
 
 	key_action_result execute(std::string&) override;
 private:
-	command_result process_command(const std::string&);
-
 	history& _history_ref;
 	printer& _printer_ref;
-	command_parser& _parser_ref;
 };
 
 

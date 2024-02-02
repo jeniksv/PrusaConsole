@@ -4,50 +4,56 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <optional>
+#include <sstream>
 
 #include "command.hpp"
 #include "cpp-terminal/key.hpp"
 #include "cpp-terminal/iostream.hpp"
 
 
-class exit_command : public command{
+class exit_command : public concrete_command_base{
 public:
 	exit_command(std::string);
 
-	command_result execute(const std::optional<std::vector<std::string>>&) override;
+	command_result execute(std::stringstream&) override;
 
-	void help() override;
+	std::string help() override;
 };
 
 
-class help_command : public command{
+class help_command : public concrete_command_base{
 public:
-	help_command(std::string);
+	help_command(std::string, std::shared_ptr<composite_command>);
 
-	command_result execute(const std::optional<std::vector<std::string>>&) override;
+	command_result execute(std::stringstream&) override;
 
-	void help() override;
+	std::string help() override;
+private:
+	void print_help_tree(std::shared_ptr<command>, int);
+
+	void print_indentation(int);
+
+	std::shared_ptr<composite_command> _command_tree_root;
 };
 
 
-class start_print_command : public command{
+class start_print_command : public concrete_command_base{
 public:
-	command_result execute(const std::optional<std::vector<std::string>>&) override;
+	command_result execute(std::stringstream&) override;
 };
 
 
-class stop_print_command : public command{
+class stop_print_command : public concrete_command_base{
 public:
-	command_result execute(const std::optional<std::vector<std::string>>&) override;
+	command_result execute(std::stringstream&) override;
 };
 
 
-class default_command : public command{
+class default_command : public concrete_command_base{
 public:
 	default_command(std::string);
 
-	command_result execute(const std::optional<std::vector<std::string>>&) override;
+	command_result execute(std::stringstream&) override;
 };
 
 #endif

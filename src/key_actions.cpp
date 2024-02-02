@@ -2,12 +2,11 @@
 
 key_action_base::~key_action_base(){}
 
-key_action_factory::key_action_factory(history& _history_ref, tab_completion& _tab_ref, printer& _printer_ref, command_parser& _parser_ref) :
+key_action_factory::key_action_factory(history& _history_ref, tab_completion& _tab_ref, printer& _printer_ref) :
 	_previous_key(),
 	_history_ref(_history_ref),
 	_tab_ref(_tab_ref),
-	_printer_ref(_printer_ref),
-	_parser_ref(_parser_ref) {}
+	_printer_ref(_printer_ref) {}
 
 std::unique_ptr<key_action_base> key_action_factory::get_action(const Term::Key& key_type){
 	std::unique_ptr<key_action_base> action;
@@ -25,9 +24,9 @@ std::unique_ptr<key_action_base> key_action_factory::get_action(const Term::Key&
 	} else if(key_type == Term::Key::Space){
 		action = std::make_unique<space_action>();
 	} else if(key_type == Term::Key::Tab){
-		action = std::make_unique<tab_action>(tab_action(_tab_ref, _previous_key == Term::Key::Tab));
+		action = std::make_unique<tab_action>(_printer_ref.get_command_tree(), _previous_key == Term::Key::Tab);
 	} else if(key_type == Term::Key::Enter){
-		action = std::make_unique<enter_action>(enter_action(_history_ref, _printer_ref, _parser_ref));
+		action = std::make_unique<enter_action>(enter_action(_history_ref, _printer_ref));
 	} else if(key_type == Term::Key::Ctrl_C){
 		action = std::make_unique<ctrl_c_action>();
 	} else {
@@ -80,15 +79,32 @@ key_action_result backspace_action::execute(std::string& current){
 }
 
 
-tab_action::tab_action(tab_completion& _tab_ref, bool _double_tab) : _tab_ref(_tab_ref), _double_tab(_double_tab) {}
+tab_action::tab_action(command_tree& _tree_ref, bool _double_tab) : _tree_ref(_tree_ref), _double_tab(_double_tab) {}
 
 key_action_result tab_action::execute(std::string& current){
-	for(int i=0; i < current.length(); ++i){
-		Term::cout << "\b \b" << std::flush;
+	if(_double_tab){
+		auto options = _tree_ref.get_complete_options(current);
+
+		if(options.empty()){
+			return key_action_result::CONTINUE;
+		}
+
+		Term::cout << std::endl;
+
+		for(const auto& options : options){
+			Term::cout << options << std::endl;
+		}
+
+		Term::cout << "> " << current << std::flush;
+	} else {
+		for(int i=0; i < current.length(); ++i){
+			Term::cout << "\b \b" << std::flush;
+		}
+
+		_tree_ref.complete_command(current);
+
+		Term::cout << current << std::flush;
 	}
-	
-	current = _tab_ref.get_path_match(current);
-	Term::cout << current << std::flush;
 
 	return key_action_result::CONTINUE;
 }
@@ -102,28 +118,7 @@ key_action_result space_action::execute(std::string& current){
 }
 
 
-enter_action::enter_action(history& _history_ref, printer& _printer_ref, command_parser& _parser_ref) :
-	_history_ref(_history_ref),
-	_printer_ref(_printer_ref),
-	_parser_ref(_parser_ref) {}
-
-command_result enter_action::process_command(const std::string& current){
-	_parser_ref.process(current);
-
-	if(!_parser_ref.get_name().has_value()){
-		return command_result::OK;
-	}
-
-	if(!_printer_ref.valid_command(_parser_ref.get_name().value())){
-		Term::cout << "Invalid command" << std::endl;
-		return command_result::UNKNOWN_COMMAND;
-	}
-	
-	auto& dbus_request = _printer_ref.get_command(_parser_ref.get_name().value());
-	auto result = dbus_request->execute(_parser_ref.get_arguments());
-
-	return result;
-}
+enter_action::enter_action(history& _history_ref, printer& _printer_ref) : _history_ref(_history_ref), _printer_ref(_printer_ref) {}
 
 key_action_result enter_action::execute(std::string& current){
 	if(!current.empty()){
@@ -132,7 +127,15 @@ key_action_result enter_action::execute(std::string& current){
 
 	Term::cout << std::endl;
 
-	command_result result = process_command(current);
+	command_result result = _printer_ref.dbus_request(current);
+
+	if(result == command_result::UNKNOWN_COMMAND){
+		Term::cout << "Unknown command" << std::endl;
+	}
+
+	if(result == command_result::INVALID_ARGUMENTS){
+		Term::cout << "Invalid arguments" << std::endl;
+	}
 
 	return result == command_result::EXIT ? key_action_result::EXIT : key_action_result::CONTINUE_WITH_RESET;
 }

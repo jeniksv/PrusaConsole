@@ -12,6 +12,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(
     prusa-console-lib
     src/command.cpp
+    src/command_tree.cpp
     src/concrete_commands.cpp
     src/cli.cpp
     src/history.cpp
@@ -19,7 +20,6 @@ add_library(
     src/tab_completion.cpp
     src/key_actions.cpp
     src/printer.cpp
-    src/parser.cpp
 )
 
 target_link_libraries(
@@ -39,8 +39,8 @@ subdirs(extern/googletest)
 add_executable(
   tests
   tests/history_tests.cpp
-  tests/tab_completion_tests.cpp
-  tests/parser_tests.cpp
+  #tests/tab_completion_tests.cpp
+  tests/key_actions_tests.cpp
 )
 
 target_link_libraries(

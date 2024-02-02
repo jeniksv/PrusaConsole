@@ -1,61 +1,77 @@
 #include "printer.hpp"
-#include "command.hpp"
 #include "cpp-terminal/iostream.hpp"
 
+/*
+printer::printer() : _command_tree(), _type("sl2") {
+	build_sl2();
+	__commands = command_tree(_command_tree);
 
-printer::printer() : _type("sl2"), _commands() {
-	build(_type);
 }
+*/
+/*
+printer:
+	// what about _command_tree = command_tree_builder.build("type");
 
+	if(sl1):
+		command_tree_builder = 
+	if(sl2):
+		command_tree_builder = 
+*/
 
-printer::printer(const std::string& printer_type) : _type(printer_type), _commands(){
-	build(_type);
+printer::printer(){
+	build_sl2();
 }
-
 
 std::string printer::get_type(){
 	return _type;
 }
 
-
-bool printer::valid_command(const std::string& command){
-	return _commands.find(command) != _commands.end();
+command_tree& printer::get_command_tree(){
+	return _command_tree;
 }
 
-
-std::unique_ptr<command>& printer::get_command(const std::string& command){
-	auto itr = _commands.find(command);
-
-	if(itr != _commands.end()){
-		return itr->second;
+command_result printer::dbus_request(const std::string& request){
+	if(request.empty()){
+		return command_result::OK;
 	}
 
-	throw std::out_of_range("command " + command + " not found.");
+	return _command_tree.execute_command(request);
 }
 
+void printer::build_sl2(){
+	_command_tree = command_tree_builder()
+        .add_core_commands()
+        .add_composite_command("tilt")
+            .add_composite_command("position")
+                 .add_concrete_command(std::make_shared<default_command>("get"))
+                 .add_concrete_command(std::make_shared<default_command>("set"))
+            .end_composite_command()
+            .add_concrete_command(std::make_shared<default_command>("home"))
+        .end_composite_command()
 
-void printer::add_command(const std::string& name, std::unique_ptr<command> object_ptr){
-	_commands[name] = std::move(object_ptr);
-}
+        .add_composite_command("tower")
+            .add_composite_command("position")
+                 .add_concrete_command(std::make_shared<default_command>("get"))
+                 .add_concrete_command(std::make_shared<default_command>("set"))
+            .end_composite_command()
+            .add_concrete_command(std::make_shared<default_command>("home"))
+        .end_composite_command()
 
+        .add_composite_command("pump")
+            .add_composite_command("position")
+                 .add_concrete_command(std::make_shared<default_command>("get"))
+                 .add_concrete_command(std::make_shared<default_command>("set"))
+            .end_composite_command()
+            .add_concrete_command(std::make_shared<default_command>("home"))
+        .end_composite_command()
 
-void printer::build(const std::string& printer_type){
-	if(printer_type == "sl1"){
-		return;
-	}
-	
-	if(printer_type == "sl2"){
-		add_command("help", std::move(std::make_unique<help_command>(help_command("help"))));
-		add_command("exit", std::move(std::make_unique<exit_command>(exit_command("exit"))));
-		add_command("set_tower_position", std::move(std::make_unique<default_command>(default_command("set_tower_position"))));
-		add_command("set_pump_position", std::move(std::make_unique<default_command>(default_command("set_pump_position"))));
-		add_command("set_tilt_position", std::move(std::make_unique<default_command>(default_command("set_tilt_position"))));
-		return;
-	}
-
-	if(printer_type == "manhattan"){
-		return;
-	}
-
-	// throw std::invalid_argument("Printer " + printer_type + " not supported.");
+        .add_composite_command("uv_led")
+            .add_concrete_command(std::make_shared<default_command>("duration"))
+            .add_concrete_command(std::make_shared<default_command>("temperature"))
+        .end_composite_command()
+        .add_composite_command("print")
+            .add_concrete_command(std::make_shared<default_command>("start"))
+            .add_concrete_command(std::make_shared<default_command>("stop"))
+        .end_composite_command()
+        .build();
 }

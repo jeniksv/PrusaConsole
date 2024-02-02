@@ -5,6 +5,8 @@
 
 
 int main(int argc, char** argv){
-	cli _cli;
-	_cli.mainloop();
+	//try{
+		cli _cli;
+		_cli.mainloop();
+	//} catch(...) {}
 }

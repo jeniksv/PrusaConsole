@@ -12,6 +12,7 @@
 
 class tab_completion {
 public:
+	/*
 	tab_completion();
 	
 	tab_completion(const std::set<std::string>&); // TODO get rid of ctor
@@ -37,6 +38,7 @@ private:
         std::string longest_common_prefix(std::vector<std::string>&);
 
         std::set<command, command_comparator> _commands;
+	*/
 };
 
 #endif
