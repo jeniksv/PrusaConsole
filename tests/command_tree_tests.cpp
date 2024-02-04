@@ -1,10 +1,13 @@
+#include <map>
 #include <sstream>
 #include <gtest/gtest.h>
 // TODO #include <gmock/gmock.h>
+#include "printer.hpp"
 #include "command.hpp"
 #include "command_tree.hpp"
 #include "command_tree_builder.hpp"
 
+/*
 class concrete_command_mock : public concrete_command_base{
 public:
 	concrete_command_mock(const std::string& name) : concrete_command_base(name) {}
@@ -17,46 +20,70 @@ public:
 	//MOCK_METHOD(command_result, execute, (std::stringstream&), (override));
 	// MOCK_METHOD(std::string, help, (), (override));
 };
+*/
 
 class CommandTreeTest : public testing::Test{
 protected:
-	command_tree _tree;
-	
+	printer p;
+	command_tree t;
+
 	void SetUp() override {
-		// TODO mock tree class for tests
-		_tree = command_tree_builder()
-			.add_composite_command("tower")
-				.add_composite_command("position")
-					.add_concrete_command(std::make_shared<concrete_command_mock>("get"))
-					.add_concrete_command(std::make_shared<concrete_command_mock>("set"))
-				.end_composite_command()
-			.end_composite_command()
-			.add_core_commands()
-			.build();
+		p = printer("mock");
+		t = p.get_command_tree();
 	}
 };
 
-TEST_F(CommandTreeTest, GetCompleteOptions){
-	std::vector<std::string> options = _tree.get_complete_options("h");
-	
-	std::vector<std::string> expected_options = {"help"};
+TEST_F(CommandTreeTest, UnknowCommand){
+	EXPECT_EQ(t.execute_command("a"), command_result::UNKNOWN_COMMAND);
+	EXPECT_EQ(t.execute_command("b"), command_result::UNKNOWN_COMMAND);
+	EXPECT_EQ(t.execute_command("tower pos"), command_result::UNKNOWN_COMMAND);
+	EXPECT_EQ(t.execute_command("tilt position"), command_result::UNKNOWN_COMMAND);
+}
 
-	EXPECT_EQ(options, expected_options);
+TEST_F(CommandTreeTest, GetCompleteOptions){
+	// map<current_command, expected_options>
+	std::map<std::string, std::vector<std::string>> test_data = {
+		{"h", {"help"}},
+		{"e", {"exit"}},
+		{"t", {"tilt", "tower"}},
+		{"print s", {"start", "stop"}},
+		{"tower position ", {"get", "set"}}
+	};
+
+	for(const auto& pair : test_data){
+		std::vector<std::string> options = t.get_complete_options(pair.first);
+		EXPECT_EQ(options, pair.second);
+	}
 }
 
 TEST_F(CommandTreeTest, CompleteCommand){
-	std::string command = "he";
-	_tree.complete_command(command);
+	// map<current_command, completed_current_command>
+	std::map<std::string, std::string> test_data = {
+		{"h", "help"},
+		{"t", "t"},
+		{"to", "tower"},
+		{"tower p", "tower position"},
+		{"tower position s", "tower position set"},
+		{"pr", "print"},
+		{"print s", "print st"},
+		{"print sta", "print start"},
+		{"abc", "abc"},
+		{"ahoj", "ahoj"},
+	};
 
-	std::string expected_command = "help";
-
-	EXPECT_EQ(command, expected_command);
+	for(const auto& pair : test_data){
+		std::string current = pair.first;
+		t.complete_command(current);
+		EXPECT_EQ(current, pair.second);
+	}
 }
 
 TEST_F(CommandTreeTest, CommandExecution){
+	/*
 	std::string command = "tower position set 1000";
-	command_result result = _tree.execute_command(command);
+	command_result result = t.execute_command(command);
 
-	// EXPECT_CALL();
-
+	EXPECT_CALL();
+	// check if mock got called
+	*/
 }

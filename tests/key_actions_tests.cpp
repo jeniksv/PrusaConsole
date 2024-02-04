@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "printer.hpp"
 #include "command.hpp"
 #include "history.hpp"
 #include "key_actions.hpp"
@@ -27,7 +28,6 @@ protected:
         }
 };
 */
-
 
 TEST(KeyActionTest, BackspaceActionTest){
 	backspace_action a;
@@ -64,6 +64,10 @@ TEST(KeyActionTest, SpaceActionTest){
 
 	a.execute(text);
 	ASSERT_EQ(text, "ahoj   ");
+
+	for(int i = 4; i < text.length(); ++i){
+		Term::cout << "\b \b" << std::flush;
+	}
 }
 
 TEST(KeyActionTest, DefaultTest){
@@ -89,24 +93,27 @@ TEST(KeyActionTest, DefaultTest){
 	a.execute(text);
 	ASSERT_EQ(text, "ahoj");
 	}
+
+	// console clean up
+	for(int i = 0; i < text.length(); ++i){
+		Term::cout << "\b \b" << std::flush;
+	}
 }
 
 TEST(KeyActionTest, EnterActionTest){
-	/*
 	{
 	history h(".tests_history");
-	enter_action a(h);
+	printer p("mock");
+	enter_action a(h, p);
 	std::string text = "ahoj";
 	
 	a.execute(text);
 	
 	// assert line was added to history
 	ASSERT_EQ(h.get_previous(), "ahoj");
-	ASSERT_EQ(text, "ahoj\n");
 	}
 	
 	if(std::filesystem::exists(".tests_history")){
 		std::filesystem::remove(".tests_history");
 	}
-	*/
 }

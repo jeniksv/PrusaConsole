@@ -38,6 +38,13 @@ public:
 };
 
 
+class mock_command_tree_builder : public command_tree_builder{
+public:
+	mock_command_tree_builder();
+
+	command_tree_builder& add_specific_commands() override;
+};
+
 class slx_command_tree_builder : public command_tree_builder{
 public:
 	slx_command_tree_builder();

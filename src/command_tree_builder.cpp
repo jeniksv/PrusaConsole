@@ -45,6 +45,39 @@ command_tree tree_build_director::construct(command_tree_builder&& builder){
 }
 
 
+mock_command_tree_builder::mock_command_tree_builder() : command_tree_builder() {}
+
+command_tree_builder& mock_command_tree_builder::add_specific_commands(){
+	add_composite_command("tilt");
+		add_concrete_command(std::make_shared<default_command>("home"));
+                add_composite_command("position");
+                        add_concrete_command(std::make_shared<default_command>("get"));
+                        add_concrete_command(std::make_shared<default_command>("set"));
+                end_composite_command();
+        end_composite_command();
+
+        add_composite_command("tower");
+		add_concrete_command(std::make_shared<default_command>("home"));
+                add_composite_command("position");
+                        add_concrete_command(std::make_shared<default_command>("get"));
+                        add_concrete_command(std::make_shared<default_command>("set"));
+                end_composite_command();
+        end_composite_command();
+
+        add_composite_command("pump");
+                add_composite_command("position");
+                        add_concrete_command(std::make_shared<default_command>("get"));
+                        add_concrete_command(std::make_shared<default_command>("set"));
+                end_composite_command();
+        end_composite_command();
+
+	add_composite_command("print");
+		add_concrete_command(std::make_shared<default_command>("start"));
+		add_concrete_command(std::make_shared<default_command>("stop"));
+	end_composite_command();
+	return *this;
+}
+
 
 slx_command_tree_builder::slx_command_tree_builder() : command_tree_builder() {}
 

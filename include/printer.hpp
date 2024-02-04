@@ -17,6 +17,8 @@ class printer{
 public:
 	printer();
 
+	printer(const std::string&);
+
 	std::string get_type();
 
 	command_result dbus_request(const std::string&);
