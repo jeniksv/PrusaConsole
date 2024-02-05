@@ -7,6 +7,12 @@ enable_testing()
 
 subdirs(extern/cpp-terminal)
 
+include(FindPkgConfig)
+pkg_check_modules(dbus-cxx REQUIRED dbus-cxx-2.0)
+pkg_check_modules(sigc REQUIRED sigc++-3.0)
+
+include_directories(${sigc_INCLUDE_DIRS} ${dbus-cxx_INCLUDE_DIRS})
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library(
@@ -25,6 +31,8 @@ add_library(
 target_link_libraries(
     prusa-console-lib
     cpp-terminal
+    dbus-cxx
+    sigc-3.0
 )
 
 add_executable(
