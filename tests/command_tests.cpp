@@ -1,24 +1,16 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <sstream>
-#include "command.hpp"  // Include the actual header file for your classes
+#include "command.hpp"
 
-/*
-// Mock class for command_result (replace it with the actual class definition)
-class MockCommandResult : public command_result {
-public:
-    MOCK_METHOD(std::string, get_output, (), (const override));
-    // Add other mock methods if necessary
-};
 
-// Mock class for concrete_command_base (replace it with the actual class definition)
-class MockConcreteCommandBase : public concrete_command_base {
+class mock_command : public concrete_command_base {
 public:
     using concrete_command_base::concrete_command_base;
     MOCK_METHOD(command_result, execute, (std::stringstream&), (override));
     MOCK_METHOD(std::string, help, (), (override));
 };
-
+/*
 // Test fixture for command class
 class CommandTest : public ::testing::Test {
 protected:
@@ -65,22 +57,24 @@ TEST_F(CommandTest, GetName) {
     // Check if the get_name() function returns the correct name
     EXPECT_EQ(cmd.get_name(), "test_command");
 }*/
-/*
+
 // Test case for concrete_command_base class
 TEST_F(ConcreteCommandBaseTest, Execute) {
     // Test the execute() function of the concrete_command_base class
     // Instantiate the mock class for command_result
-    MockCommandResult mockResult;
+    mock_command mock("mock command");
     
     // Instantiate the mock class for concrete_command_base
-    MockConcreteCommandBase concreteCmd("test_command");
-
+    //MockConcreteCommandBase concreteCmd("test_command");
+    std::stringstream ss("tilt home");	
+    // mock.execute(ss);
     // Set up expectations for the mock objects
-    EXPECT_CALL(concreteCmd, execute(::testing::_)).WillOnce(::testing::Return(mockResult));
+    
+    //EXPECT_CALL(mock, execute(ss)); //.WillOnce(testing::Return(mockResult));
 
     // Call the execute() function and check if it returns the expected result
-    EXPECT_EQ(concreteCmd.execute(std::stringstream()), mockResult);
-}*/
+    // EXPECT_EQ(concreteCmd.execute(std::stringstream()), mockResult);
+}
 
 // Test case for composite_command class
 TEST_F(CompositeCommandTest, AddCommand) {
@@ -88,10 +82,9 @@ TEST_F(CompositeCommandTest, AddCommand) {
     // Instantiate the composite_command class
     composite_command c("root");
 
-    // Add child commands to the composite command
-    c.add_command(std::make_shared<command>("child_1", false));
-    c.add_command(std::make_shared<command>("child_2", false));
-    c.add_command(std::make_shared<command>("child_3", false));
+    c.add_command(std::make_shared<composite_command>("child_1"));
+    c.add_command(std::make_shared<composite_command>("child_2"));
+    c.add_command(std::make_shared<composite_command>("child_3"));
 
     // Check if the get_children() function returns the correct number of children
     EXPECT_EQ(c.get_children().size(), 3);

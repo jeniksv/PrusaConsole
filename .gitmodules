@@ -4,6 +4,3 @@
 [submodule "extern/cpp-terminal"]
 	path = extern/cpp-terminal
 	url = git@github.com:jupyter-xeus/cpp-terminal.git
-[submodule "extern/dbus-cxx"]
-	path = extern/dbus-cxx
-	url = git@github.com:dbus-cxx/dbus-cxx.git

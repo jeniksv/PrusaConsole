@@ -57,7 +57,7 @@ class composite_command : public command{
 public:
 	composite_command();
 	
-	composite_command(const std::string&);
+	composite_command(std::string);
 
 	void add_command(std::shared_ptr<command>);
 

@@ -41,7 +41,7 @@ std::string concrete_command_base::help(){
 
 composite_command::composite_command() : command("", false), _children() {}
 
-composite_command::composite_command(const std::string& _name) : command(_name, false), _children() {}
+composite_command::composite_command(std::string _name) : command(_name, false), _children() {}
 
 void composite_command::add_command(std::shared_ptr<command> c){
 	_children.push_back(c);
