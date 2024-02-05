@@ -16,7 +16,6 @@ void printer::init(){
 	}
 
 	if(_type == "sl2"){
-		//_command_tree = tree_build_director().construct(std::move(std::make_unique<sl2_command_tree_builder>()));
 		_command_tree = tree_build_director().construct(sl2_command_tree_builder());
 	} else if(_type == "mock"){
 		_command_tree = tree_build_director().construct(mock_command_tree_builder());

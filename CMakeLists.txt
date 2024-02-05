@@ -41,11 +41,13 @@ add_executable(
   tests/history_tests.cpp
   tests/command_tree_tests.cpp
   tests/key_actions_tests.cpp
+  tests/command_tests.cpp
 )
 
 target_link_libraries(
   tests
   GTest::gtest_main
+  GTest::gmock_main
   prusa-console-lib
 )
 

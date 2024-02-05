@@ -1,98 +1,89 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include "printer.hpp"
 #include "command.hpp"
 #include "history.hpp"
 #include "key_actions.hpp"
+#include "cpp-terminal/key.hpp"
 
-/*
 class KeyActionTest: public testing::Test{
 protected:
+	history h {".tests_history"};
+	printer p {"mock"};
+	key_action_factory f {h, p};
         std::unique_ptr<key_action_base> key_action_ptr;
-        //std::vector<std::string> commands {"a", "b", "c", "d", "e", "f", "g", "h"};
-
-        void SetUp() override{
-                if(std::filesystem::exists(".tests_history")){
-                        std::filesystem::remove(".tests_history");
-                }
-
-                history_ptr = std::make_unique<history>(history(".tests_history"));
-        }
 
         void TearDown() override{
-                // tohle byla ta race condition, destruktor se zavolat az potom, co dobehla metoda
-                history_ptr.reset();
+		key_action_ptr.reset();
 
                 if(std::filesystem::exists(".tests_history")){
                         std::filesystem::remove(".tests_history");
                 }
         }
 };
-*/
 
-TEST(KeyActionTest, BackspaceActionTest){
-	backspace_action a;
+
+TEST_F(KeyActionTest, BackspaceActionTest){
+	key_action_ptr = f.get_action(Term::Key::Backspace);	
 	std::string text = "ahoj";
 
-	a.execute(text);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "aho");
 
-	a.execute(text);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "ah");
 
-	a.execute(text);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "a");
 
-	a.execute(text);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "");
 
-	a.execute(text);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "");
 
-	a.execute(text);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "");
 }
 
-TEST(KeyActionTest, SpaceActionTest){
-	space_action a;
+TEST_F(KeyActionTest, SpaceActionTest){
+	key_action_ptr = f.get_action(Term::Key::Space);
+	
 	std::string text = "ahoj";
 	
-	a.execute(text);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "ahoj ");
 
-	a.execute(text);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "ahoj  ");
 
-	a.execute(text);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "ahoj   ");
 
+	// console clean up
 	for(int i = 4; i < text.length(); ++i){
 		Term::cout << "\b \b" << std::flush;
 	}
 }
 
-TEST(KeyActionTest, DefaultTest){
+TEST_F(KeyActionTest, DefaultTest){
 	std::string text = "";
 
-	{
-	default_action a("a");
-	a.execute(text);
+	key_action_ptr = f.get_action(Term::Key::a);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "a");
-	}
-	{
-	default_action a("h");
-	a.execute(text);
+	
+	key_action_ptr = f.get_action(Term::Key::h);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "ah");
-	}
-	{
-	default_action a("o");
-	a.execute(text);
+	
+	key_action_ptr = f.get_action(Term::Key::o);	
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "aho");
-	}
-	{
-	default_action a("j");
-	a.execute(text);
+	
+	key_action_ptr = f.get_action(Term::Key::j);
+	key_action_ptr->execute(text);
 	ASSERT_EQ(text, "ahoj");
-	}
 
 	// console clean up
 	for(int i = 0; i < text.length(); ++i){
@@ -100,20 +91,30 @@ TEST(KeyActionTest, DefaultTest){
 	}
 }
 
-TEST(KeyActionTest, EnterActionTest){
-	{
-	history h(".tests_history");
-	printer p("mock");
-	enter_action a(h, p);
+TEST_F(KeyActionTest, TabTest){
+	std::string text = "tilt po";
+
+	key_action_ptr = f.get_action(Term::Key::Tab);
+	key_action_ptr->execute(text);
+	ASSERT_EQ(text, "tilt position");
+
+	// console clean up
+	for(int i = 0; i < text.length(); ++i){
+		Term::cout << "\b \b" << std::flush;
+	}
+}
+
+TEST_F(KeyActionTest, EnterActionTest){
+	key_action_ptr = f.get_action(Term::Key::Enter);
 	std::string text = "ahoj";
 	
-	a.execute(text);
+	key_action_ptr->execute(text);
 	
 	// assert line was added to history
 	ASSERT_EQ(h.get_previous(), "ahoj");
-	}
-	
-	if(std::filesystem::exists(".tests_history")){
-		std::filesystem::remove(".tests_history");
-	}
+
+	// console clean up
+	//for(int i = 0; i < 16; ++i){
+	//	Term::cout << "\b \b" << std::flush;
+	//}
 }
