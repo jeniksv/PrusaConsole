@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <sstream>
+#include <dbus-cxx.h>
 
 #include "command.hpp"
 #include "cpp-terminal/key.hpp"
@@ -51,9 +52,13 @@ public:
 
 class tilt_home_command : public concrete_command_base{
 public:
-	tilt_home_command(std::shared_ptr<DBus::ObjectProxy>);
+	tilt_home_command(std::string, std::shared_ptr<DBus::ObjectProxy>);
 
 	command_result execute(std::stringstream&) override;
+
+	std::string help() override;
+private:
+	std::shared_ptr<DBus::ObjectProxy> _printer0_ptr;
 };
 
 

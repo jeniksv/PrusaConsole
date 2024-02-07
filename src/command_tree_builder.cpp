@@ -6,7 +6,10 @@ command_tree_builder::command_tree_builder() : _root(std::make_shared<composite_
 command_tree_builder::command_tree_builder(std::shared_ptr<DBus::Connection> _dbus_connection) :
 	_root(std::make_shared<composite_command>()),
 	_current_composite(_root),
-	_dbus_connection(_dbus_connection) {}
+	_dbus_connection(_dbus_connection)
+{
+	std::shared_ptr<DBus::ObjectProxy> _printer0_ptr = _dbus_connection->create_object_proxy("cz.prusa3d.sl1.printer0", "/cz/prusa3d/sl1/printer0");	
+}
 
 command_tree_builder& command_tree_builder::add_concrete_command(std::shared_ptr<command> c){
 	_current_composite->add_command(c);
@@ -55,7 +58,6 @@ mock_command_tree_builder::mock_command_tree_builder() : command_tree_builder() 
 
 command_tree_builder& mock_command_tree_builder::add_specific_commands(){
 	add_composite_command("tilt");
-		add_concrete_command(std::make_shared<default_command>("home"));
                 add_composite_command("position");
                         add_concrete_command(std::make_shared<default_command>("get"));
                         add_concrete_command(std::make_shared<default_command>("set"));
@@ -89,6 +91,7 @@ slx_command_tree_builder::slx_command_tree_builder(std::shared_ptr<DBus::Connect
 
 command_tree_builder& slx_command_tree_builder::add_tilt(){
 	add_composite_command("tilt");
+		add_concrete_command(std::make_shared<tilt_home_command>("home", _printer0_ptr));
 		add_composite_command("position");
 			add_concrete_command(std::make_shared<default_command>("get"));
 			add_concrete_command(std::make_shared<default_command>("set"));

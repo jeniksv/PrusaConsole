@@ -38,6 +38,9 @@ public:
 private:
 	void init();
 
+        std::shared_ptr<DBus::Dispatcher> dispatcher;
+        std::shared_ptr<DBus::Connection> connection;
+
 	printer_model _type;
 	command_tree _command_tree;
 };

@@ -63,7 +63,32 @@ std::string help_command::help(){
 	return "lists all commands and their usage";
 }
 
-tilt_home_command::tilt_home_command(std::shared_ptr<DBus::ObjectProxy> connection){}
+
+tilt_home_command::tilt_home_command(std::string name, std::shared_ptr<DBus::ObjectProxy> _printer0_ptr) : concrete_command_base(name), _printer0_ptr(_printer0_ptr){
+	Term::cout << "init" << std::endl;
+}
+
+command_result tilt_home_command::execute(std::stringstream& ss){
+	init_args_vector(ss);
+
+	if(!_args_vector.empty()){
+		command_result::INVALID_ARGUMENTS;
+	}
+
+	if(_printer0_ptr){
+		DBus::MethodProxy<void()>& tilt_home_proxy = *(_printer0_ptr->create_method<void()>("cz.prusa3d.sl1.printer0","tilt_home"));
+		Term::cout << "before call" << std::endl;
+		tilt_home_proxy();
+		return command_result::OK;
+	}
+
+	// TODO new command result
+	return command_result::OK;
+}
+
+std::string tilt_home_command::help(){
+	return "move tilt to home position (position 0)";
+}
 
 default_command::default_command(std::string name) : concrete_command_base(name) {}
 

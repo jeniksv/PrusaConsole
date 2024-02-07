@@ -33,6 +33,7 @@ protected:
 	std::shared_ptr<composite_command> _current_composite;
 	std::stack<std::shared_ptr<composite_command>> _composite_stack;
 	std::shared_ptr<DBus::Connection> _dbus_connection;
+	std::shared_ptr<DBus::ObjectProxy> _printer0_ptr;
 };
 
 
