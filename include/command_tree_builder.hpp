@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <dbus-cxx.h>
 
 #include "command.hpp"
 #include "command_tree.hpp"
@@ -29,6 +30,7 @@ protected:
 	std::shared_ptr<composite_command> _root;
 	std::shared_ptr<composite_command> _current_composite;
 	std::stack<std::shared_ptr<composite_command>> _composite_stack;
+	std::shared_ptr<DBus::Connection> _dbus_connection;
 };
 
 

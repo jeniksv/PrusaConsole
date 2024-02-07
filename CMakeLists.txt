@@ -26,6 +26,8 @@ add_library(
     src/main.cpp
     src/key_actions.cpp
     src/printer.cpp
+    src/cz_prusa3d_sl1_printer0Proxy.cpp
+    src/printer0Proxy.cpp
 )
 
 target_link_libraries(

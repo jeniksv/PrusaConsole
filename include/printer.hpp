@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <dbus-cxx.h>
 
 #include "command.hpp"
 #include "command_tree.hpp"
