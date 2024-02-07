@@ -63,7 +63,7 @@ std::string help_command::help(){
 	return "lists all commands and their usage";
 }
 
-
+tilt_home_command::tilt_home_command(std::shared_ptr<DBus::ObjectProxy> connection){}
 
 default_command::default_command(std::string name) : concrete_command_base(name) {}
 

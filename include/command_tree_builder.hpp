@@ -13,6 +13,8 @@ class command_tree_builder{
 public:
 	command_tree_builder();
 
+	command_tree_builder(std::shared_ptr<DBus::Connection>);
+
 	virtual ~command_tree_builder() = default;
 
 	command_tree_builder& add_concrete_command(std::shared_ptr<command>);
@@ -49,7 +51,7 @@ public:
 
 class slx_command_tree_builder : public command_tree_builder{
 public:
-	slx_command_tree_builder();
+	slx_command_tree_builder(std::shared_ptr<DBus::Connection>);
 
 	virtual ~slx_command_tree_builder() = default;
 
@@ -61,7 +63,7 @@ public:
 
 class sl2_command_tree_builder : public slx_command_tree_builder{
 public:
-	sl2_command_tree_builder();
+	sl2_command_tree_builder(std::shared_ptr<DBus::Connection>);
 
 	command_tree_builder& add_specific_commands() override;
 };

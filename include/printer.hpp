@@ -14,13 +14,23 @@
 #include "concrete_commands.hpp"
 
 
+enum class printer_model{
+	UNKNOWN = -1,
+	MOCK = 0,
+	SL1 = 1,
+	SL1S = 2,
+	M1 = 3,
+	SL2 = 4,
+};
+
+
 class printer{
 public:
 	printer();
 
-	printer(const std::string&);
+	printer(printer_model);
 
-	std::string get_type();
+	printer_model get_type();
 
 	command_result dbus_request(const std::string&);
 
@@ -28,7 +38,7 @@ public:
 private:
 	void init();
 
-	std::string _type;
+	printer_model _type;
 	command_tree _command_tree;
 };
 

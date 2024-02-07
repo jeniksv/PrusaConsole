@@ -2,6 +2,12 @@
 
 command_tree_builder::command_tree_builder() : _root(std::make_shared<composite_command>()), _current_composite(_root) {}
 
+
+command_tree_builder::command_tree_builder(std::shared_ptr<DBus::Connection> _dbus_connection) :
+	_root(std::make_shared<composite_command>()),
+	_current_composite(_root),
+	_dbus_connection(_dbus_connection) {}
+
 command_tree_builder& command_tree_builder::add_concrete_command(std::shared_ptr<command> c){
 	_current_composite->add_command(c);
 	return *this;
@@ -79,7 +85,7 @@ command_tree_builder& mock_command_tree_builder::add_specific_commands(){
 }
 
 
-slx_command_tree_builder::slx_command_tree_builder() : command_tree_builder() {}
+slx_command_tree_builder::slx_command_tree_builder(std::shared_ptr<DBus::Connection> connection) : command_tree_builder(connection) {}
 
 command_tree_builder& slx_command_tree_builder::add_tilt(){
 	add_composite_command("tilt");
@@ -103,7 +109,7 @@ command_tree_builder& slx_command_tree_builder::add_tower(){
 
 
 
-sl2_command_tree_builder::sl2_command_tree_builder() : slx_command_tree_builder() {}
+sl2_command_tree_builder::sl2_command_tree_builder(std::shared_ptr<DBus::Connection> connection) : slx_command_tree_builder(connection) {}
 
 command_tree_builder& sl2_command_tree_builder::add_specific_commands(){
 	add_tilt();

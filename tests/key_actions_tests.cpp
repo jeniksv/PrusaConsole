@@ -9,7 +9,7 @@
 class KeyActionTest: public testing::Test{
 protected:
 	history h {".tests_history"};
-	printer p {"mock"};
+	printer p {printer_model::MOCK};
 	key_action_factory f {h, p};
         std::unique_ptr<key_action_base> key_action_ptr;
 

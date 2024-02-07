@@ -49,6 +49,14 @@ public:
 };
 
 
+class tilt_home_command : public concrete_command_base{
+public:
+	tilt_home_command(std::shared_ptr<DBus::ObjectProxy>);
+
+	command_result execute(std::stringstream&) override;
+};
+
+
 class default_command : public concrete_command_base{
 public:
 	default_command(std::string);

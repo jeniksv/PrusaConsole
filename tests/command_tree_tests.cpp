@@ -25,11 +25,10 @@ public:
 
 class CommandTreeTest : public testing::Test{
 protected:
-	printer p;
+	printer p {printer_model::MOCK};
 	command_tree t;
 
 	void SetUp() override {
-		p = printer("mock");
 		t = p.get_command_tree();
 
 		SetUpMockFileSystem();
