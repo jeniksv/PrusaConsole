@@ -40,6 +40,7 @@ private:
 
         std::shared_ptr<DBus::Dispatcher> dispatcher;
         std::shared_ptr<DBus::Connection> connection;
+	std::shared_ptr<DBus::ObjectProxy> object;
 
 	printer_model _type;
 	command_tree _command_tree;

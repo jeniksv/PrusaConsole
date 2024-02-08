@@ -15,10 +15,8 @@ void printer::init(){
 	dispatcher = DBus::StandaloneDispatcher::create();
 	connection = dispatcher->create_connection( DBus::BusType::SYSTEM );
 	// TODO pass pritner0 directly and return ptr to it
-	std::shared_ptr<DBus::ObjectProxy> object = connection->create_object_proxy("cz.prusa3d.sl1.printer0", "/cz/prusa3d/sl1/printer0");
-	
+	object = connection->create_object_proxy("cz.prusa3d.sl1.printer0", "/cz/prusa3d/sl1/printer0");
 	if(_type == printer_model::UNKNOWN){
-		std::shared_ptr<DBus::ObjectProxy> object = connection->create_object_proxy("cz.prusa3d.sl1.printer0", "/cz/prusa3d/sl1/printer0");
 		DBus::PropertyProxy<int>& printer_model_proxy = *(object->create_property<int>("cz.prusa3d.sl1.printer0", "printer_model"));
 		// Term::cout << printer_model_proxy.value() << std::endl;
 
@@ -26,7 +24,7 @@ void printer::init(){
 	}
 
 	if(_type == printer_model::SL2){
-		_command_tree = tree_build_director().construct(sl2_command_tree_builder(connection));
+		_command_tree = tree_build_director().construct(sl2_command_tree_builder(object));
 	} else {
 		_command_tree = tree_build_director().construct(mock_command_tree_builder());
 	}
