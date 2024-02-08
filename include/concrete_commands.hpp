@@ -52,13 +52,13 @@ public:
 
 class tilt_home_command : public concrete_command_base{
 public:
-	tilt_home_command(std::string, std::shared_ptr<DBus::ObjectProxy>);
+	tilt_home_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
 	command_result execute(std::stringstream&) override;
 
 	std::string help() override;
 private:
-	std::shared_ptr<DBus::ObjectProxy> _printer0_ptr;
+	std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies;
 };
 
 

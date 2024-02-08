@@ -13,9 +13,7 @@ class command_tree_builder{
 public:
 	command_tree_builder();
 
-	//command_tree_builder(std::shared_ptr<DBus::Connection>);
-
-	command_tree_builder(std::shared_ptr<DBus::ObjectProxy>);
+	command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
 	virtual ~command_tree_builder() = default;
 
@@ -34,9 +32,7 @@ protected:
 	std::shared_ptr<composite_command> _root;
 	std::shared_ptr<composite_command> _current_composite;
 	std::stack<std::shared_ptr<composite_command>> _composite_stack;
-	//std::shared_ptr<DBus::Connection> _dbus_connection;
-	std::shared_ptr<DBus::ObjectProxy> _dbus_connection;
-	std::shared_ptr<DBus::ObjectProxy> _printer0_ptr;
+	std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies;
 };
 
 
@@ -48,14 +44,14 @@ public:
 
 class mock_command_tree_builder : public command_tree_builder{
 public:
-	mock_command_tree_builder();
+	mock_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
 	command_tree_builder& add_specific_commands() override;
 };
 
 class slx_command_tree_builder : public command_tree_builder{
 public:
-	slx_command_tree_builder(std::shared_ptr<DBus::ObjectProxy>);
+	slx_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
 	virtual ~slx_command_tree_builder() = default;
 
@@ -67,7 +63,7 @@ public:
 
 class sl2_command_tree_builder : public slx_command_tree_builder{
 public:
-	sl2_command_tree_builder(std::shared_ptr<DBus::ObjectProxy>);
+	sl2_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
 	command_tree_builder& add_specific_commands() override;
 };

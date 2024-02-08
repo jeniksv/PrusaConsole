@@ -9,24 +9,27 @@ printer::printer(printer_model _type) : _type(_type) {
 	init();
 }
 
-void printer::init(){
-	//std::shared_ptr<DBus::Dispatcher> dispatcher = DBus::StandaloneDispatcher::create();
-	//std::shared_ptr<DBus::Connection> connection = dispatcher->create_connection( DBus::BusType::SYSTEM );
-	dispatcher = DBus::StandaloneDispatcher::create();
-	connection = dispatcher->create_connection( DBus::BusType::SYSTEM );
-	// TODO pass pritner0 directly and return ptr to it
-	object = connection->create_object_proxy("cz.prusa3d.sl1.printer0", "/cz/prusa3d/sl1/printer0");
-	if(_type == printer_model::UNKNOWN){
-		DBus::PropertyProxy<int>& printer_model_proxy = *(object->create_property<int>("cz.prusa3d.sl1.printer0", "printer_model"));
-		// Term::cout << printer_model_proxy.value() << std::endl;
+void printer::connect_dbus(){
+	_dispatcher = DBus::StandaloneDispatcher::create();
+	_connection = _dispatcher->create_connection(DBus::BusType::SYSTEM);
+	// temp
+	// object = _connection->create_object_proxy("cz.prusa3d.sl1.printer0", "/cz/prusa3d/sl1/printer0");
+	_proxies.insert({"cz.prusa3d.sl1.printer0", _connection->create_object_proxy("cz.prusa3d.sl1.printer0", "/cz/prusa3d/sl1/printer0")});
+	_proxies.insert({"cz.prusa3d.sl1.exposure0", _connection->create_object_proxy("cz.prusa3d.sl1.exposure0", "/cz/prusa3d/sl1/exposure0")});
+}
 
+void printer::init(){
+	connect_dbus();
+
+	if(_type == printer_model::UNKNOWN){
+		DBus::PropertyProxy<int>& printer_model_proxy = *(_proxies.at("cz.prusa3d.sl1.printer0")->create_property<int>("cz.prusa3d.sl1.printer0", "printer_model"));
 		_type = static_cast<printer_model>(printer_model_proxy.value());
 	}
 
 	if(_type == printer_model::SL2){
-		_command_tree = tree_build_director().construct(sl2_command_tree_builder(object));
+		_command_tree = tree_build_director().construct(sl2_command_tree_builder(_proxies));
 	} else {
-		_command_tree = tree_build_director().construct(mock_command_tree_builder());
+		_command_tree = tree_build_director().construct(mock_command_tree_builder(_proxies));
 	}
 }
 

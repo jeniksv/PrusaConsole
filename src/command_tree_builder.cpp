@@ -1,17 +1,11 @@
 #include "command_tree_builder.hpp"
 
-command_tree_builder::command_tree_builder() : _root(std::make_shared<composite_command>()), _current_composite(_root) {}
+//command_tree_builder::command_tree_builder() : _root(std::make_shared<composite_command>()), _current_composite(_root) {}
 
-
-command_tree_builder::command_tree_builder(std::shared_ptr<DBus::ObjectProxy> _dbus_connection) :
-					    //std::shared_ptr<DBus::Connection> _dbus_connection) :
+command_tree_builder::command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies) :
 	_root(std::make_shared<composite_command>()),
 	_current_composite(_root),
-	_dbus_connection(_dbus_connection)
-{
-	_printer0_ptr = _dbus_connection;
-	//std::shared_ptr<DBus::ObjectProxy> _printer0_ptr = _dbus_connection->create_object_proxy("cz.prusa3d.sl1.printer0", "/cz/prusa3d/sl1/printer0");	
-}
+	_proxies(_proxies) {}
 
 command_tree_builder& command_tree_builder::add_concrete_command(std::shared_ptr<command> c){
 	_current_composite->add_command(c);
@@ -56,7 +50,7 @@ command_tree tree_build_director::construct(command_tree_builder&& builder){
 }
 
 
-mock_command_tree_builder::mock_command_tree_builder() : command_tree_builder() {}
+mock_command_tree_builder::mock_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies) : command_tree_builder(_proxies) {}
 
 command_tree_builder& mock_command_tree_builder::add_specific_commands(){
 	add_composite_command("tilt");
@@ -89,11 +83,11 @@ command_tree_builder& mock_command_tree_builder::add_specific_commands(){
 }
 
 
-slx_command_tree_builder::slx_command_tree_builder(std::shared_ptr<DBus::ObjectProxy> connection) : command_tree_builder(connection) {}
+slx_command_tree_builder::slx_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& proxies) : command_tree_builder(proxies) {}
 
 command_tree_builder& slx_command_tree_builder::add_tilt(){
 	add_composite_command("tilt");
-		add_concrete_command(std::make_shared<tilt_home_command>("home", _printer0_ptr));
+		add_concrete_command(std::make_shared<tilt_home_command>("home", _proxies));
 		add_composite_command("position");
 			add_concrete_command(std::make_shared<default_command>("get"));
 			add_concrete_command(std::make_shared<default_command>("set"));
@@ -114,7 +108,7 @@ command_tree_builder& slx_command_tree_builder::add_tower(){
 
 
 
-sl2_command_tree_builder::sl2_command_tree_builder(std::shared_ptr<DBus::ObjectProxy> connection) : slx_command_tree_builder(connection) {}
+sl2_command_tree_builder::sl2_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& proxies) : slx_command_tree_builder(proxies) {}
 
 command_tree_builder& sl2_command_tree_builder::add_specific_commands(){
 	add_tilt();

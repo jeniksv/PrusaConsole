@@ -36,12 +36,16 @@ public:
 
 	command_tree& get_command_tree();
 private:
+	void connect_dbus();
+
 	void init();
 
-        std::shared_ptr<DBus::Dispatcher> dispatcher;
-        std::shared_ptr<DBus::Connection> connection;
+        std::shared_ptr<DBus::Dispatcher> _dispatcher;
+        std::shared_ptr<DBus::Connection> _connection;
 	std::shared_ptr<DBus::ObjectProxy> object;
 
+	std::map<std::string, std::shared_ptr<DBus::ObjectProxy>> _proxies;
+	
 	printer_model _type;
 	command_tree _command_tree;
 };

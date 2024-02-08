@@ -64,7 +64,7 @@ std::string help_command::help(){
 }
 
 
-tilt_home_command::tilt_home_command(std::string name, std::shared_ptr<DBus::ObjectProxy> _printer0_ptr) : concrete_command_base(name), _printer0_ptr(_printer0_ptr){
+tilt_home_command::tilt_home_command(std::string name, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _p) : concrete_command_base(name), _proxies(_p){
 	Term::cout << "init" << std::endl;
 }
 
@@ -75,12 +75,15 @@ command_result tilt_home_command::execute(std::stringstream& ss){
 		command_result::INVALID_ARGUMENTS;
 	}
 
-	if(_printer0_ptr){
-		DBus::MethodProxy<void()>& tilt_home_proxy = *(_printer0_ptr->create_method<void()>("cz.prusa3d.sl1.printer0","tilt_home"));
-		Term::cout << "before call" << std::endl;
-		tilt_home_proxy();
+	std::string interface = "cz.prusa3d.sl1.printer0";
+	
+	if(!_proxies.at(interface)){
 		return command_result::OK;
 	}
+
+	DBus::MethodProxy<void()>& tilt_home_proxy = *(_proxies.at(interface)->create_method<void()>(interface,"tilt_home"));
+	Term::cout << "before call" << std::endl;
+	tilt_home_proxy();
 
 	// TODO new command result
 	return command_result::OK;
