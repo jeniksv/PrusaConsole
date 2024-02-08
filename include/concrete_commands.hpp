@@ -1,97 +1,95 @@
 #ifndef CONCRETE_COMMANDS_H_
 #define CONCRETE_COMMANDS_H_
 
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <sstream>
 #include <dbus-cxx.h>
 
+#include <algorithm>
+#include <sstream>
+#include <string>
+#include <vector>
+
 #include "command.hpp"
-#include "cpp-terminal/key.hpp"
 #include "cpp-terminal/iostream.hpp"
+#include "cpp-terminal/key.hpp"
 
-
-class exit_command : public concrete_command_base{
+class exit_command : public concrete_command_base {
 public:
-	exit_command(std::string);
+    exit_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
-	command_result execute(std::stringstream&) override;
+    command_result execute(std::stringstream&) override;
 
-	std::string help() override;
+    std::string help() override;
 };
 
-
-class help_command : public concrete_command_base{
+class help_command : public concrete_command_base {
 public:
-	help_command(std::string, std::shared_ptr<composite_command>);
+    help_command(std::string, std::shared_ptr<composite_command>,
+        std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
-	command_result execute(std::stringstream&) override;
+    command_result execute(std::stringstream&) override;
 
-	std::string help() override;
+    std::string help() override;
+
 private:
-	void print_help_tree(std::shared_ptr<command>, int);
+    void print_help_tree(std::shared_ptr<command>, int);
 
-	void print_indentation(int);
+    void print_indentation(int);
 
-	std::shared_ptr<composite_command> _command_tree_root;
+    std::shared_ptr<composite_command> _command_tree_root;
 };
 
-
-class start_print_command : public concrete_command_base{
+class start_print_command : public concrete_command_base {
 public:
-	command_result execute(std::stringstream&) override;
+    command_result execute(std::stringstream&) override;
 };
 
-
-class stop_print_command : public concrete_command_base{
+class stop_print_command : public concrete_command_base {
 public:
-	command_result execute(std::stringstream&) override;
+    command_result execute(std::stringstream&) override;
 };
 
-
-class tilt_home_command : public concrete_command_base{
+class tilt_home_command : public concrete_command_base {
 public:
-	tilt_home_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+    tilt_home_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
-	command_result execute(std::stringstream&) override;
+    command_result execute(std::stringstream&) override;
 
-	std::string help() override;
+    std::string help() override;
+
 private:
-	std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies;
+    // std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies;
 };
 
-
-class tilt_position_get_command : public concrete_command_base{
+class tilt_position_get_command : public concrete_command_base {
 public:
-	tilt_position_get_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+    tilt_position_get_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
-	command_result execute(std::stringstream&) override;
+    command_result execute(std::stringstream&) override;
 
-	std::string help() override;
+    std::string help() override;
+
 private:
-	std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies;
+    // std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies;
 };
 
-
-class tilt_position_set_command : public concrete_command_base{
+class tilt_position_set_command : public concrete_command_base {
 public:
-	tilt_position_set_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+    tilt_position_set_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
-	command_result execute(std::stringstream&) override;
+    command_result execute(std::stringstream&) override;
 
-	std::string help() override;
+    std::string help() override;
+
 private:
-	// TODO move _proxies to concrete_command_base
-	std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies;
+    // TODO move _proxies to concrete_command_base
+    // std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies;
 };
 
-
-class default_command : public concrete_command_base{
+class default_command : public concrete_command_base {
 public:
-	default_command(std::string);
+    default_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
-	command_result execute(std::stringstream&) override;
+    command_result execute(std::stringstream&) override;
 };
 
 #endif

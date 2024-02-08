@@ -1,8 +1,7 @@
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
-#include <sstream>
 #include "command.hpp"
-
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
+#include <sstream>
 
 class mock_command : public concrete_command_base {
 public:
@@ -26,11 +25,13 @@ protected:
 // Test fixture for concrete_command_base class
 class ConcreteCommandBaseTest : public ::testing::Test {
 protected:
-    void SetUp() override {
+    void SetUp() override
+    {
         // Initialization code specific to each test case
     }
 
-    void TearDown() override {
+    void TearDown() override
+    {
         // Cleanup code specific to each test case
     }
 };
@@ -38,11 +39,13 @@ protected:
 // Test fixture for composite_command class
 class CompositeCommandTest : public ::testing::Test {
 protected:
-    void SetUp() override {
+    void SetUp() override
+    {
         // Initialization code specific to each test case
     }
 
-    void TearDown() override {
+    void TearDown() override
+    {
         // Cleanup code specific to each test case
     }
 };
@@ -59,25 +62,27 @@ TEST_F(CommandTest, GetName) {
 }*/
 
 // Test case for concrete_command_base class
-TEST_F(ConcreteCommandBaseTest, Execute) {
+TEST_F(ConcreteCommandBaseTest, Execute)
+{
     // Test the execute() function of the concrete_command_base class
     // Instantiate the mock class for command_result
-    mock_command mock("mock command");
-    
+    // mock_command mock("mock command");
+
     // Instantiate the mock class for concrete_command_base
-    //MockConcreteCommandBase concreteCmd("test_command");
-    std::stringstream ss("tilt home");	
+    // MockConcreteCommandBase concreteCmd("test_command");
+    // std::stringstream ss("tilt home");
     // mock.execute(ss);
     // Set up expectations for the mock objects
-    
-    //EXPECT_CALL(mock, execute(ss)); //.WillOnce(testing::Return(mockResult));
+
+    // EXPECT_CALL(mock, execute(ss)); //.WillOnce(testing::Return(mockResult));
 
     // Call the execute() function and check if it returns the expected result
     // EXPECT_EQ(concreteCmd.execute(std::stringstream()), mockResult);
 }
 
 // Test case for composite_command class
-TEST_F(CompositeCommandTest, AddCommand) {
+TEST_F(CompositeCommandTest, AddCommand)
+{
     // Test the add_command() function of the composite_command class
     // Instantiate the composite_command class
     composite_command c("root");
@@ -89,7 +94,7 @@ TEST_F(CompositeCommandTest, AddCommand) {
     // Check if the get_children() function returns the correct number of children
     EXPECT_EQ(c.get_children().size(), 3);
 
-    for(const auto& child : c.get_children()){
-    	EXPECT_FALSE(child->is_leaf());
+    for (const auto& child : c.get_children()) {
+        EXPECT_FALSE(child->is_leaf());
     }
 }

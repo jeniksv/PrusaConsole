@@ -3,10 +3,6 @@
 
 #include <string>
 
-#include "history.hpp"
-#include "key_actions.hpp"
-#include "printer.hpp"
-
 #include "cpp-terminal/cursor.hpp"
 #include "cpp-terminal/exception.hpp"
 #include "cpp-terminal/input.hpp"
@@ -17,22 +13,25 @@
 #include "cpp-terminal/terminal.hpp"
 #include "cpp-terminal/tty.hpp"
 #include "cpp-terminal/version.hpp"
+#include "history.hpp"
+#include "key_actions.hpp"
+#include "printer.hpp"
 
-
-class cli{
+class cli {
 public:
-	cli();
+    cli();
 
-	void mainloop();
+    void mainloop();
+
 private:
-	void reset_state();
+    void reset_state();
 
-	bool _running;
-	std::string _current_line;
+    bool _running;
+    std::string _current_line;
 
-	history _history;
-	printer _printer;
-	key_action_factory _key_action_factory;
+    history _history;
+    printer _printer;
+    key_action_factory _key_action_factory;
 };
 
 #endif
