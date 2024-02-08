@@ -12,8 +12,6 @@ printer::printer(printer_model _type) : _type(_type) {
 void printer::connect_dbus(){
 	_dispatcher = DBus::StandaloneDispatcher::create();
 	_connection = _dispatcher->create_connection(DBus::BusType::SYSTEM);
-	// temp
-	// object = _connection->create_object_proxy("cz.prusa3d.sl1.printer0", "/cz/prusa3d/sl1/printer0");
 	_proxies.insert({"cz.prusa3d.sl1.printer0", _connection->create_object_proxy("cz.prusa3d.sl1.printer0", "/cz/prusa3d/sl1/printer0")});
 	_proxies.insert({"cz.prusa3d.sl1.exposure0", _connection->create_object_proxy("cz.prusa3d.sl1.exposure0", "/cz/prusa3d/sl1/exposure0")});
 }

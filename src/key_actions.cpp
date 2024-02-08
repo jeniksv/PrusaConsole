@@ -136,6 +136,10 @@ key_action_result enter_action::execute(std::string& current){
 		Term::cout << "Invalid arguments" << std::endl;
 	}
 
+	if(result == command_result::DBUS_ERROR){
+		Term::cout << "Dbus error" << std::endl;
+	}
+
 	return result == command_result::EXIT ? key_action_result::EXIT : key_action_result::CONTINUE_WITH_RESET;
 }
 

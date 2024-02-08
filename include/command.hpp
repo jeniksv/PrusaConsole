@@ -15,6 +15,7 @@ enum class command_result{
 	UNKNOWN_COMMAND,
 	NOT_IMPLEMENTED,
 	EXIT,
+	DBUS_ERROR,
 };
 
 

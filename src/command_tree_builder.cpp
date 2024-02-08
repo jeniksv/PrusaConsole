@@ -89,7 +89,7 @@ command_tree_builder& slx_command_tree_builder::add_tilt(){
 	add_composite_command("tilt");
 		add_concrete_command(std::make_shared<tilt_home_command>("home", _proxies));
 		add_composite_command("position");
-			add_concrete_command(std::make_shared<default_command>("get"));
+			add_concrete_command(std::make_shared<tilt_position_get_command>("get", _proxies));
 			add_concrete_command(std::make_shared<default_command>("set"));
 		end_composite_command();
 	end_composite_command();
