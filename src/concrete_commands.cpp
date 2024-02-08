@@ -89,7 +89,10 @@ std::string tilt_home_command::help(){
 	return "move tilt to home position (position 0)";
 }
 
-tilt_position_get_command::tilt_position_get_command(std::string name, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _p) : concrete_command_base(name), _proxies(_p){}
+
+tilt_position_get_command::tilt_position_get_command(std::string name, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _p) :
+	concrete_command_base(name),
+	_proxies(_p) {}
 
 command_result tilt_position_get_command::execute(std::stringstream& ss){
         init_args_vector(ss);
@@ -110,7 +113,32 @@ command_result tilt_position_get_command::execute(std::stringstream& ss){
 }
 
 std::string tilt_position_get_command::help(){
-	return "get tilt position in usteps";
+	return "returns tilt position in microsteps";
+}
+
+
+tilt_position_set_command::tilt_position_set_command(std::string name, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _p) :
+	concrete_command_base(name),
+	_proxies(_p) {}
+
+command_result tilt_position_set_command::execute(std::stringstream& ss){
+	// TODO better value checks
+	int value;
+	ss >> value;
+
+	std::string interface = "cz.prusa3d.sl1.printer0";
+
+        if(!_proxies.at(interface)){
+                return command_result::DBUS_ERROR;
+        }
+
+	DBus::PropertyProxy<int>& tilt_position_proxy = *(_proxies.at("cz.prusa3d.sl1.printer0")->create_property<int>("cz.prusa3d.sl1.printer0", "tilt_position"));
+	tilt_position_proxy.set_value(value);
+	return command_result::OK;
+}
+
+std::string tilt_position_set_command::help(){
+	return "sets tilt position to microsteps";
 }
 
 

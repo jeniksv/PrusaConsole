@@ -74,6 +74,19 @@ private:
 };
 
 
+class tilt_position_set_command : public concrete_command_base{
+public:
+	tilt_position_set_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+
+	command_result execute(std::stringstream&) override;
+
+	std::string help() override;
+private:
+	// TODO move _proxies to concrete_command_base
+	std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies;
+};
+
+
 class default_command : public concrete_command_base{
 public:
 	default_command(std::string);
