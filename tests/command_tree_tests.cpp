@@ -1,5 +1,6 @@
 #include <map>
 #include <fstream>
+#include <algorithm>
 #include <filesystem>
 #include <gtest/gtest.h>
 // TODO #include <gmock/gmock.h>
@@ -90,14 +91,15 @@ TEST_F(CommandTreeTest, GetPathOptions){
 		{"print start filesystem_mock/P", {"Pictures"}},
 		{
 			"print start filesystem_mock/Pictures/IMG",
-			{"IMG20230303013148", "IMG20230303015801", "IMG20230303013145", "IMG20230302235930", "IMG20230303015757"}
+			{"IMG20230302235930", "IMG20230303013145","IMG20230303013148", "IMG20230303015757", "IMG20230303015801"}
 		},
-		{"print start filesystem_mock/Pictures/IMG20230303013", {"IMG20230303013148", "IMG20230303013145"}},
+		{"print start filesystem_mock/Pictures/IMG20230303013", {"IMG20230303013145", "IMG20230303013148"}},
 		{"print start filesystem_mock/D", {"Documents", "Downloads"}},
 	};
 
 	for(const auto& pair : test_data){
 		std::vector<std::string> options = t.get_complete_options(pair.first);
+		std::sort(options.begin(), options.end());
 		EXPECT_EQ(options, pair.second);
 	}
 }
