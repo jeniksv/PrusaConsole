@@ -7,8 +7,7 @@ cli::cli()
     , _printer()
     , _key_action_factory(_history, _printer)
 {
-    Term::terminal.setOptions(Term::Option::NoClearScreen, Term::Option::NoSignalKeys, Term::Option::Cursor,
-        Term::Option::Raw);
+    Term::terminal.setOptions(Term::Option::NoClearScreen, Term::Option::NoSignalKeys, Term::Option::Cursor, Term::Option::Raw);
     Term::Screen term_size { Term::screen_size() };
     Term::Cursor cursor { Term::cursor_position() };
 }

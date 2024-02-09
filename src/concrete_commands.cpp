@@ -88,7 +88,7 @@ command_result tilt_home_command::execute(std::stringstream& ss)
 
     std::string interface = "cz.prusa3d.sl1.printer0";
 
-    if (!_proxies.at(interface)) {
+    if (!_proxies.contains(interface) || !_proxies.at(interface)) {
         return command_result::DBUS_ERROR;
     }
 
@@ -100,7 +100,7 @@ command_result tilt_home_command::execute(std::stringstream& ss)
 
 std::string tilt_home_command::help()
 {
-    return "move tilt to home position (position 0)";
+    return "move tilt to home position (0 micro steps)";
 }
 
 tilt_position_get_command::tilt_position_get_command(std::string name,
@@ -119,11 +119,13 @@ command_result tilt_position_get_command::execute(std::stringstream& ss)
 
     std::string interface = "cz.prusa3d.sl1.printer0";
 
-    if (!_proxies.at(interface)) {
+    if (!_proxies.contains(interface) || !_proxies.at(interface)) {
         return command_result::DBUS_ERROR;
     }
 
+    //Term::cout << "debug 1" << std::endl;
     DBus::PropertyProxy<int>& tilt_position_proxy = *(_proxies.at(interface)->create_property<int>(interface, "tilt_position"));
+    //Term::cout << "debug 2" << std::endl;
     Term::cout << tilt_position_proxy.value() << std::endl;
     return command_result::OK;
 }
@@ -147,7 +149,7 @@ command_result tilt_position_set_command::execute(std::stringstream& ss)
 
     std::string interface = "cz.prusa3d.sl1.printer0";
 
-    if (!_proxies.at(interface)) {
+    if (!_proxies.contains(interface) || !_proxies.at(interface)) {
         return command_result::DBUS_ERROR;
     }
 

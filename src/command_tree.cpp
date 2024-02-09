@@ -86,8 +86,7 @@ void command_tree::complete_path(std::string& current, const std::string& prefix
     }
 }
 
-std::vector<std::string> command_tree::get_composite_command_options(const std::shared_ptr<composite_command> node,
-    const std::string& prefix)
+std::vector<std::string> command_tree::get_composite_command_options(const std::shared_ptr<composite_command> node, const std::string& prefix)
 {
     std::vector<std::string> options;
 
