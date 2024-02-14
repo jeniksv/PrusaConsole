@@ -46,6 +46,11 @@ void concrete_command_base::init_args_vector(std::stringstream& ss)
     }
 }
 
+std::string concrete_command_base::arguments()
+{
+    return std::string();
+}
+
 std::string concrete_command_base::help()
 {
     return std::string("command has no help text");

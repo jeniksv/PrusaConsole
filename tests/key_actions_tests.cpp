@@ -100,7 +100,7 @@ TEST_F(KeyActionTest, TabTest)
 
     key_action_ptr = f.get_action(Term::Key::Tab);
     key_action_ptr->execute(text);
-    ASSERT_EQ(text, "tilt position");
+    ASSERT_EQ(text, "tilt position ");
 
     // console clean up
     for (int i = 0; i < text.length(); ++i) {

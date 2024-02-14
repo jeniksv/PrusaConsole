@@ -6,11 +6,13 @@ if [ "$1" = "--clean" ]; then
 fi
 
 if [ "$1" = "--test" ]; then
+    git submodule update --init --recursive
     mkdir -p build && cd build
     cmake .. && cmake --build . && ./tests
 fi
 
 if [ "$1" = "--build" ]; then
+    git submodule update --init --recursive
     mkdir -p build && cd build
     cmake .. && cmake --build . && mv prusa-console ../
 fi

@@ -1,8 +1,5 @@
 #include "command_tree_builder.hpp"
 
-// command_tree_builder::command_tree_builder() :
-// _root(std::make_shared<composite_command>()), _current_composite(_root) {}
-
 command_tree_builder::command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies)
     : _root(std::make_shared<composite_command>())
     , _current_composite(_root)
@@ -111,8 +108,9 @@ command_tree_builder& slx_command_tree_builder::add_tilt()
 command_tree_builder& slx_command_tree_builder::add_tower()
 {
     add_composite_command("tower");
+    add_concrete_command(std::make_shared<tower_home_command>("home", _proxies));
     add_composite_command("position");
-    add_concrete_command(std::make_shared<default_command>("get", _proxies));
+    add_concrete_command(std::make_shared<tower_position_get_command>("get", _proxies));
     add_concrete_command(std::make_shared<default_command>("set", _proxies));
     end_composite_command();
     end_composite_command();

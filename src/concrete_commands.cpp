@@ -43,7 +43,13 @@ command_result help_command::execute(std::stringstream& ss)
 void help_command::print_help_tree(std::shared_ptr<command> node, int depth)
 {
     if (node->is_leaf()) {
-        Term::cout << " -> " << std::dynamic_pointer_cast<concrete_command_base>(node)->help() << std::endl;
+        auto concrete_node = std::dynamic_pointer_cast<concrete_command_base>(node);
+
+        if (!concrete_node->arguments().empty()) {
+            Term::cout << " " << concrete_node->arguments() << std::flush;
+        }
+
+        Term::cout << " -> " << concrete_node->help() << std::endl;
         return;
     }
 
@@ -100,7 +106,7 @@ command_result tilt_home_command::execute(std::stringstream& ss)
 
 std::string tilt_home_command::help()
 {
-    return "move tilt to home position (0 micro steps)";
+    return "sets tilt position to home position (0 microsteps)";
 }
 
 tilt_position_get_command::tilt_position_get_command(std::string name,
@@ -123,10 +129,11 @@ command_result tilt_position_get_command::execute(std::stringstream& ss)
         return command_result::DBUS_ERROR;
     }
 
-    //Term::cout << "debug 1" << std::endl;
-    DBus::PropertyProxy<int>& tilt_position_proxy = *(_proxies.at(interface)->create_property<int>(interface, "tilt_position"));
-    //Term::cout << "debug 2" << std::endl;
-    Term::cout << tilt_position_proxy.value() << std::endl;
+    // Term::cout << "debug 1" << std::endl;
+    //DBus::PropertyProxy<int>& tilt_position_proxy = *(_proxies.at(interface)->create_property<int>(interface, "tilt_position"));
+    auto position_proxy = this->_proxies.at(interface)->create_property<int>(interface, "tilt_position", DBus::PropertyAccess::ReadWrite, DBus::PropertyUpdateType::DoesNotUpdate);
+    // Term::cout << "debug 2" << std::endl;
+    Term::cout << position_proxy->value() << std::endl;
     return command_result::OK;
 }
 
@@ -143,9 +150,12 @@ tilt_position_set_command::tilt_position_set_command(std::string name,
 
 command_result tilt_position_set_command::execute(std::stringstream& ss)
 {
-    // TODO better value checks
     int value;
     ss >> value;
+
+    // if(ss.fail()){
+    //	return command_result::INVALID_ARGUMENTS;
+    // }
 
     std::string interface = "cz.prusa3d.sl1.printer0";
 
@@ -153,14 +163,15 @@ command_result tilt_position_set_command::execute(std::stringstream& ss)
         return command_result::DBUS_ERROR;
     }
 
-    DBus::PropertyProxy<int>& tilt_position_proxy = *(_proxies.at("cz.prusa3d.sl1.printer0")->create_property<int>("cz.prusa3d.sl1.printer0", "tilt_position"));
-    tilt_position_proxy.set_value(value);
+    //DBus::PropertyProxy<int>& tilt_position_proxy = *(_proxies.at("cz.prusa3d.sl1.printer0")->create_property<int>("cz.prusa3d.sl1.printer0", "tilt_position"));
+    auto position_proxy = this->_proxies.at(interface)->create_property<int>(interface, "tilt_position", DBus::PropertyAccess::ReadWrite, DBus::PropertyUpdateType::DoesNotUpdate);
+    position_proxy->set_value(value);
     return command_result::OK;
 }
 
 std::string tilt_position_set_command::help()
 {
-    return "sets tilt position (in microsteps)";
+    return "sets tilt position to given position (in microsteps)";
 }
 
 default_command::default_command(std::string name, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies)
@@ -181,4 +192,66 @@ command_result default_command::execute(std::stringstream& ss)
     Term::cout << std::endl;
 
     return command_result::NOT_IMPLEMENTED;
+}
+
+tower_home_command::tower_home_command(std::string name, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _p)
+    : concrete_command_base(name, _p)
+{
+}
+
+command_result tower_home_command::execute(std::stringstream& ss)
+{
+    init_args_vector(ss);
+
+    if (!_args_vector.empty()) {
+        command_result::INVALID_ARGUMENTS;
+    }
+
+    std::string interface = "cz.prusa3d.sl1.printer0";
+
+    if (!_proxies.contains(interface) || !_proxies.at(interface)) {
+        return command_result::DBUS_ERROR;
+    }
+
+    DBus::MethodProxy<void()>& tower_home_proxy = *(_proxies.at(interface)->create_method<void()>(interface, "tower_home"));
+    tower_home_proxy();
+
+    return command_result::OK;
+}
+
+std::string tower_home_command::help()
+{
+    return "sets tower position to home position (0 microsteps)";
+}
+
+tower_position_get_command::tower_position_get_command(std::string name,
+    std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _p)
+    : concrete_command_base(name, _p)
+{
+}
+
+command_result tower_position_get_command::execute(std::stringstream& ss)
+{
+    init_args_vector(ss);
+
+    if (!_args_vector.empty()) {
+        command_result::INVALID_ARGUMENTS;
+    }
+
+    std::string interface = "cz.prusa3d.sl1.printer0";
+
+    if (!_proxies.contains(interface) || !_proxies.at(interface)) {
+        return command_result::DBUS_ERROR;
+    }
+
+    // Term::cout << "debug 1" << std::endl;
+    DBus::PropertyProxy<int>& tower_position_proxy = *(_proxies.at(interface)->create_property<int>(interface, "tower_position_nm"));
+    // Term::cout << "debug 2" << std::endl;
+    Term::cout << tower_position_proxy.value() << std::endl;
+    return command_result::OK;
+}
+
+std::string tower_position_get_command::help()
+{
+    return "returns tower position (in microsteps)";
 }

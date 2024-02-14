@@ -9,25 +9,62 @@
 #include "history.hpp"
 #include "printer.hpp"
 
+/**
+ * @brief Enumeration representing the result of a key action.
+ */
 enum class key_action_result {
     CONTINUE,
     CONTINUE_WITH_RESET,
     EXIT,
 };
 
+/**
+ * @brief Base class for key actions.
+ *
+ * The `key_action_base` class provides an interface for key actions.
+ */
 class key_action_base {
 public:
+    /**
+     * @brief Virtual destructor for the key_action_base class.
+     */
     virtual ~key_action_base();
 
-    virtual key_action_result execute(std::string&) = 0;
+    /**
+     * @brief Execute the key action.
+     *
+     * @param input The input string to be modified by the action.
+     * @return Result of executing the key action.
+     */
+    virtual key_action_result execute(std::string& input) = 0;
 };
 
+/**
+ * @brief Class for creating key actions.
+ *
+ * The `key_action_factory` class creates key actions based on the provided key events.
+ */
 class key_action_factory {
 public:
-    key_action_factory(history&, printer&);
+    /**
+     * @brief Constructor for the key_action_factory class.
+     *
+     * @param history_ref Reference to the history object.
+     * @param printer_ref Reference to the printer object.
+     */
+    key_action_factory(history& history_ref, printer& printer_ref);
 
-    std::unique_ptr<key_action_base> get_action(const Term::Key&);
+    /**
+     * @brief Get a unique pointer to a key action based on the provided key event.
+     *
+     * @param key The key event for which to create an action.
+     * @return Unique pointer to the created key action.
+     */
+    std::unique_ptr<key_action_base> get_action(const Term::Key& key);
 
+    /**
+     * @brief Reset the key action factory.
+     */
     void reset();
 
 private:

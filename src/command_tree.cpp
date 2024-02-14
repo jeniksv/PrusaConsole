@@ -45,6 +45,7 @@ void command_tree::complete_composite_command(const std::shared_ptr<composite_co
 
     auto suffix = longest_common_prefix(children_subset);
     current.append(suffix.length() < prefix.length() ? "" : suffix.substr(prefix.length()));
+    current.append(children_subset.contains(suffix) ? " " : "");
 }
 
 void command_tree::complete_path(std::string& current, const std::string& prefix)

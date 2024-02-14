@@ -157,7 +157,7 @@ key_action_result enter_action::execute(std::string& current)
 
     if (result == command_result::DBUS_ERROR) {
         Term::cout << "Dbus error" << std::endl;
-	return key_action_result::EXIT;
+        return key_action_result::EXIT;
     }
 
     return result == command_result::EXIT ? key_action_result::EXIT : key_action_result::CONTINUE_WITH_RESET;

@@ -110,14 +110,14 @@ TEST_F(CommandTreeTest, CompleteCommand)
 {
     // map<current_command, completed_current_command>
     std::map<std::string, std::string> test_data = {
-        { "h", "help" },
+        { "h", "help " },
         { "t", "t" },
-        { "to", "tower" },
-        { "tower p", "tower position" },
-        { "tower position s", "tower position set" },
-        { "pr", "print" },
+        { "to", "tower " },
+        { "tower p", "tower position " },
+        { "tower position s", "tower position set " },
+        { "pr", "print " },
         { "print s", "print st" },
-        { "print sta", "print start" },
+        { "print sta", "print start " },
         { "abc", "abc" },
         { "ahoj", "ahoj" },
     };
