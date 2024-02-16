@@ -31,19 +31,8 @@ bool command_comparator::operator()(const command& lhs, const command& rhs) cons
 concrete_command_base::concrete_command_base(const std::string& name,
     std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _p)
     : command(name, true)
-    , _args_vector()
     , _proxies(_p)
 {
-}
-
-void concrete_command_base::init_args_vector(std::stringstream& ss)
-{
-    _args_vector.clear();
-    std::string temp;
-
-    while (ss >> temp) {
-        _args_vector.push_back(temp);
-    }
 }
 
 std::string concrete_command_base::arguments()

@@ -138,6 +138,8 @@ public:
     command_tree_builder& add_tilt();
 
     command_tree_builder& add_tower();
+
+    command_tree_builder& add_resin_refill_system();
 };
 
 class sl2_command_tree_builder : public slx_command_tree_builder {

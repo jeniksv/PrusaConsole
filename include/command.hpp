@@ -117,13 +117,6 @@ public:
     virtual std::string help();
 
 protected:
-    /**
-     * @brief Initialize the arguments vector from the provided stream.
-     *
-     * @param args Stream containing command arguments.
-     */
-    void init_args_vector(std::stringstream& args);
-
     std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies;
     std::vector<std::string> _args_vector;
 };
