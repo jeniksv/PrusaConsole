@@ -34,6 +34,10 @@ Run tests with:
 ./scripts/project.sh --test
 ```
 
+### Usage
+
+
+
 ### Testing
 
 For testing and development without a physical printer, set up a virtual printer. If you're using an SLx printer type, you can se it up with:

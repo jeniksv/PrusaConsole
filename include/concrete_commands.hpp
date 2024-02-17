@@ -4,6 +4,8 @@
 #include <dbus-cxx.h>
 
 #include <algorithm>
+#include <chrono>
+#include <filesystem>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -36,16 +38,6 @@ private:
     void print_indentation(int);
 
     std::shared_ptr<composite_command> _command_tree_root;
-};
-
-class start_print_command : public concrete_command_base {
-public:
-    command_result execute(std::stringstream&) override;
-};
-
-class stop_print_command : public concrete_command_base {
-public:
-    command_result execute(std::stringstream&) override;
 };
 
 class tilt_home_command : public concrete_command_base {
@@ -107,6 +99,38 @@ public:
     command_result execute(std::stringstream&) override;
 
     std::string help() override;
+};
+
+class tank_fill_command : public concrete_command_base {
+public:
+    tank_fill_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+
+    command_result execute(std::stringstream&) override;
+
+    std::string help() override;
+};
+
+class tank_empty_command : public concrete_command_base {
+public:
+    tank_empty_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+
+    command_result execute(std::stringstream&) override;
+
+    std::string help() override;
+};
+
+class start_print_command : public concrete_command_base {
+public:
+    start_print_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+
+    command_result execute(std::stringstream&) override;
+
+private:
+    bool printer_in_available_state();
+
+    bool set_current_exposure(const std::string&);
+
+    bool wait_for_state_ready();
 };
 
 #endif

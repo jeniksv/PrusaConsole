@@ -117,6 +117,23 @@ command_tree_builder& slx_command_tree_builder::add_tower()
     return *this;
 }
 
+command_tree_builder& slx_command_tree_builder::add_resin_refill_system()
+{
+    add_composite_command("tank");
+    add_concrete_command(std::make_shared<tank_fill_command>("fill", _proxies));
+    add_concrete_command(std::make_shared<tank_empty_command>("empty", _proxies));
+    end_composite_command();
+    return *this;
+}
+
+command_tree_builder& slx_command_tree_builder::add_exposure_handlers()
+{
+    add_composite_command("print");
+    add_concrete_command(std::make_shared<start_print_command>("start", _proxies));
+    end_composite_command();
+    return *this;
+}
+
 sl2_command_tree_builder::sl2_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& proxies)
     : slx_command_tree_builder(proxies)
 {
@@ -126,5 +143,20 @@ command_tree_builder& sl2_command_tree_builder::add_specific_commands()
 {
     add_tilt();
     add_tower();
+    add_exposure_handlers();
+    add_resin_refill_system();
+    return *this;
+}
+
+sl1s_command_tree_builder::sl1s_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& proxies)
+    : slx_command_tree_builder(proxies)
+{
+}
+
+command_tree_builder& sl1s_command_tree_builder::add_specific_commands()
+{
+    add_tilt();
+    add_tower();
+    add_exposure_handlers();
     return *this;
 }

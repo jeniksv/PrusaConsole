@@ -24,7 +24,7 @@ void printer::connect_dbus()
 
     if (_connection) {
         _proxies.insert({ "cz.prusa3d.sl1.printer0", _connection->create_object_proxy("cz.prusa3d.sl1.printer0", "/cz/prusa3d/sl1/printer0") });
-        _proxies.insert({ "cz.prusa3d.sl1.exposure0", _connection->create_object_proxy("cz.prusa3d.sl1.exposure0", "/cz/prusa3d/sl1/exposure0") });
+        _proxies.insert({ "cz.prusa3d.sl1.exposure0", _connection->create_object_proxy("cz.prusa3d.sl1.exposure0", "/cz/prusa3d/sl1/exposures0/0") });
     }
 }
 
@@ -40,7 +40,10 @@ void printer::init()
     if (_type == printer_model::SL2) {
         _command_tree = tree_build_director().construct(sl2_command_tree_builder(_proxies));
     } else if (_type == printer_model::SL1S) {
+        _command_tree = tree_build_director().construct(sl1s_command_tree_builder(_proxies));
     } else if (_type == printer_model::SL1) {
+        // TODO create builder for sl1
+        _command_tree = tree_build_director().construct(sl1s_command_tree_builder(_proxies));
     } else {
         _command_tree = tree_build_director().construct(mock_command_tree_builder(_proxies));
     }

@@ -45,7 +45,6 @@ void command_tree::complete_composite_command(const std::shared_ptr<composite_co
 
     auto suffix = longest_common_prefix(children_subset);
     current.append(suffix.length() < prefix.length() ? "" : suffix.substr(prefix.length()));
-    // TODO nedoplnovat kdyz mam concrete_command
     current.append(children_subset.contains(suffix) ? " " : "");
 }
 
@@ -177,9 +176,16 @@ std::string command_tree::longest_common_prefix(const std::set<std::string>& com
     return result;
 }
 
-command_result command_tree::execute_command(const std::string& c)
+command_result command_tree::execute_command(const std::string& line)
 {
-    std::stringstream ss(c);
+    auto begin = line.find_first_not_of(" \t\n");
+    auto end = line.find_last_not_of(" \t\n");
+
+    if (begin == std::string::npos || end == std::string::npos) {
+        return command_result::OK;
+    }
+
+    std::stringstream ss(line.substr(begin, end - begin + 1));
 
     return _root->execute(ss);
 }

@@ -140,11 +140,20 @@ public:
     command_tree_builder& add_tower();
 
     command_tree_builder& add_resin_refill_system();
+
+    command_tree_builder& add_exposure_handlers();
 };
 
 class sl2_command_tree_builder : public slx_command_tree_builder {
 public:
     sl2_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+
+    command_tree_builder& add_specific_commands() override;
+};
+
+class sl1s_command_tree_builder : public slx_command_tree_builder {
+public:
+    sl1s_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
     command_tree_builder& add_specific_commands() override;
 };

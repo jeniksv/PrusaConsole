@@ -1,6 +1,7 @@
 #ifndef CONSOLE_READER_H_
 #define CONSOLE_READER_H_
 
+#include <dbus-cxx.h>
 #include <string>
 
 #include "cpp-terminal/cursor.hpp"
