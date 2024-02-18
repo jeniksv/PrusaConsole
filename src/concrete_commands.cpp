@@ -338,9 +338,9 @@ bool exposure_command_base::set_current_exposure_object()
             current_exposure_path.append(item);
         }
 
-	if (current_exposure_path == "/"){
-		return false;
-	}
+        if (current_exposure_path == "/") {
+            return false;
+        }
 
         interface = "cz.prusa3d.sl1.exposure0";
         this->_proxies[interface] = _connection->create_object_proxy(interface, current_exposure_path);
