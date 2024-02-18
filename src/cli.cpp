@@ -1,5 +1,4 @@
 #include "cli.hpp"
-
 cli::cli()
     : _running(true)
     , _current_line()

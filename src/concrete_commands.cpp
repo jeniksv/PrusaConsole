@@ -86,7 +86,15 @@ command_result tilt_home_command::execute(std::stringstream& ss)
         command_result::INVALID_ARGUMENTS;
     }
 
-    std::string interface = "cz.prusa3d.sl1.printer0";
+    // TODO better control, right now it throws dbus 
+    // it need something like printer state instead of checking that exposure0 is setted up
+    std::string interface = "cz.prusa3d.sl1.exposure0";
+
+    if (_proxies.contains(interface)) {
+        return command_result::CANT_USE_COMPONENT;
+    }
+
+    interface = "cz.prusa3d.sl1.printer0";
 
     if (!_proxies.contains(interface) || !_proxies.at(interface)) {
         return command_result::DBUS_ERROR;
@@ -146,7 +154,13 @@ command_result tilt_position_set_command::execute(std::stringstream& ss)
         return command_result::INVALID_ARGUMENTS;
     }
 
-    std::string interface = "cz.prusa3d.sl1.printer0";
+    std::string interface = "cz.prusa3d.sl1.exposure0";
+
+    if (_proxies.contains(interface)) {
+        return command_result::CANT_USE_COMPONENT;
+    }
+
+    interface = "cz.prusa3d.sl1.printer0";
 
     if (!_proxies.contains(interface) || !_proxies.at(interface)) {
         return command_result::DBUS_ERROR;
@@ -183,7 +197,13 @@ command_result tower_home_command::execute(std::stringstream& ss)
         command_result::INVALID_ARGUMENTS;
     }
 
-    std::string interface = "cz.prusa3d.sl1.printer0";
+    std::string interface = "cz.prusa3d.sl1.exposure0";
+
+    if (_proxies.contains(interface)) {
+        return command_result::CANT_USE_COMPONENT;
+    }
+
+    interface = "cz.prusa3d.sl1.printer0";
 
     if (!_proxies.contains(interface) || !_proxies.at(interface)) {
         return command_result::DBUS_ERROR;
@@ -243,7 +263,13 @@ command_result tower_position_set_command::execute(std::stringstream& ss)
         return command_result::INVALID_ARGUMENTS;
     }
 
-    std::string interface = "cz.prusa3d.sl1.printer0";
+    std::string interface = "cz.prusa3d.sl1.exposure0";
+
+    if (_proxies.contains(interface)) {
+        return command_result::CANT_USE_COMPONENT;
+    }
+
+    interface = "cz.prusa3d.sl1.printer0";
 
     if (!_proxies.contains(interface) || !_proxies.at(interface)) {
         return command_result::DBUS_ERROR;
@@ -270,7 +296,13 @@ command_result tank_fill_command::execute(std::stringstream& ss)
         command_result::INVALID_ARGUMENTS;
     }
 
-    std::string interface = "cz.prusa3d.sl1.printer0";
+    std::string interface = "cz.prusa3d.sl1.exposure0";
+
+    if (_proxies.contains(interface)) {
+        return command_result::CANT_USE_COMPONENT;
+    }
+
+    interface = "cz.prusa3d.sl1.printer0";
 
     if (!_proxies.contains(interface) || !_proxies.at(interface)) {
         return command_result::DBUS_ERROR;
@@ -298,7 +330,13 @@ command_result tank_empty_command::execute(std::stringstream& ss)
         command_result::INVALID_ARGUMENTS;
     }
 
-    std::string interface = "cz.prusa3d.sl1.printer0";
+    std::string interface = "cz.prusa3d.sl1.exposure0";
+
+    if (_proxies.contains(interface)) {
+        return command_result::CANT_USE_COMPONENT;
+    }
+
+    interface = "cz.prusa3d.sl1.printer0";
 
     if (!_proxies.contains(interface) || !_proxies.at(interface)) {
         return command_result::DBUS_ERROR;
@@ -394,8 +432,12 @@ bool start_print_command::wait_for_state_ready()
     auto t_end = std::chrono::system_clock::now() + std::chrono::seconds(20);
 
     while (std::chrono::system_clock::now() < t_end) {
-        if (proxy->value() == 26) {
-            return true;
+        try {
+            if (proxy->value() == 26) {
+                return true;
+            }
+        } catch (...) {
+            return false;
         }
     }
 

@@ -1,7 +1,5 @@
 #include "printer.hpp"
 
-#include "cpp-terminal/iostream.hpp"
-
 printer::printer()
     : _type(printer_model::UNKNOWN)
 {
@@ -32,9 +30,15 @@ void printer::init()
     connect_dbus();
 
     if (_connection && _type == printer_model::UNKNOWN) {
-        std::string interface = "cz.prusa3d.sl1.printer0";
-        auto printer_model_proxy = this->_proxies.at(interface)->create_property<int>(interface, "printer_model", DBus::PropertyAccess::ReadWrite, DBus::PropertyUpdateType::DoesNotUpdate);
-        _type = static_cast<printer_model>(printer_model_proxy->value());
+        try {
+            std::string interface = "cz.prusa3d.sl1.printer0";
+            auto printer_model_proxy = this->_proxies.at(interface)->create_property<int>(interface, "printer_model", DBus::PropertyAccess::ReadWrite, DBus::PropertyUpdateType::DoesNotUpdate);
+            _type = static_cast<printer_model>(printer_model_proxy->value());
+        } catch (...) {
+            Term::cout << "Printer model not detected" << std::endl;
+            Term::cout << "App continues with mocked command tree" << std::endl;
+            _type = printer_model::MOCK;
+        }
     }
 
     if (_type == printer_model::SL2) {

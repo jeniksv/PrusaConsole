@@ -164,6 +164,10 @@ key_action_result enter_action::execute(std::string& current)
         Term::cout << "Exposure does not exist" << std::endl;
     }
 
+    if (result == command_result::CANT_USE_COMPONENT) {
+        Term::cout << "Can't use component" << std::endl;
+    }
+
     return result == command_result::EXIT ? key_action_result::EXIT : key_action_result::CONTINUE_WITH_RESET;
 }
 

@@ -6,6 +6,6 @@ int main(int argc, char** argv)
         cli _cli;
         _cli.mainloop();
     } catch (...) {
-        std::cerr << "DBUS Error" << std::endl;
+        std::cerr << "D-BUS Error" << std::endl;
     }
 }

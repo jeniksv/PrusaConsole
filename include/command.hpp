@@ -22,6 +22,7 @@ enum class command_result {
     EXIT,
     DBUS_ERROR,
     EXPOSURE_DOES_NOT_EXIST,
+    CANT_USE_COMPONENT,
 };
 
 /**

@@ -3,7 +3,7 @@ Command line interface for latest Prusa3D printers.
 
 ### Getting started
 
-**Note:** The current codebase is optimized for execution on Ubuntu 22.04. It is important to mention that running the code on Windows is not supported due to the lack of dbus interface support in the Windows environment.
+**Note:** The current codebase is optimized for execution on Ubuntu 22.04. It is important to mention that running the code on Windows is not supported due to the lack of D-BUS interface support in the Windows environment.
 
 Before the first run, install all required dependencies with:
 
@@ -36,11 +36,19 @@ Run tests with:
 
 ### Usage
 
+The usage is as follows:
 
+```
+> help
+> tilt position set 1000
+> tilt home
+> start print /home/jeniksv/project.sl1s
+> exposure current_layer
+```
 
 ### Testing
 
-For testing and development without a physical printer, set up a virtual printer. If you're using an SLx printer type, you can se it up with:
+For testing and development without a physical printer, set up a virtual printer. If you're using an SLx printer type, you can set it up with:
 
 ```
 ./scripts/run_virtual.sh
