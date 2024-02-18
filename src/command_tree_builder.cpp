@@ -1,8 +1,9 @@
 #include "command_tree_builder.hpp"
 
-command_tree_builder::command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies)
+command_tree_builder::command_tree_builder(std::shared_ptr<DBus::Connection> _connection, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies)
     : _root(std::make_shared<composite_command>())
     , _current_composite(_root)
+    , _connection(_connection)
     , _proxies(_proxies)
 {
 }
@@ -52,8 +53,9 @@ command_tree tree_build_director::construct(command_tree_builder&& builder)
 }
 
 mock_command_tree_builder::mock_command_tree_builder(
+    std::shared_ptr<DBus::Connection> _connection,
     std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies)
-    : command_tree_builder(_proxies)
+    : command_tree_builder(_connection, _proxies)
 {
 }
 
@@ -88,8 +90,10 @@ command_tree_builder& mock_command_tree_builder::add_specific_commands()
     return *this;
 }
 
-slx_command_tree_builder::slx_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& proxies)
-    : command_tree_builder(proxies)
+slx_command_tree_builder::slx_command_tree_builder(
+    std::shared_ptr<DBus::Connection> _connection,
+    std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies)
+    : command_tree_builder(_connection, _proxies)
 {
 }
 
@@ -129,13 +133,22 @@ command_tree_builder& slx_command_tree_builder::add_resin_refill_system()
 command_tree_builder& slx_command_tree_builder::add_exposure_handlers()
 {
     add_composite_command("print");
-    add_concrete_command(std::make_shared<start_print_command>("start", _proxies));
+    add_concrete_command(std::make_shared<start_print_command>("start", _connection, _proxies));
+    add_concrete_command(std::make_shared<stop_print_command>("stop", _connection, _proxies));
+    end_composite_command();
+    add_composite_command("exposure");
+    add_concrete_command(std::make_shared<exposure_current_layer_command>("current_layer", _connection, _proxies));
+    add_concrete_command(std::make_shared<exposure_time_remain_command>("time_remain", _connection, _proxies));
+    add_concrete_command(std::make_shared<exposure_progress_command>("progress", _connection, _proxies));
+    add_concrete_command(std::make_shared<exposure_resin_used_command>("resin_used", _connection, _proxies));
     end_composite_command();
     return *this;
 }
 
-sl2_command_tree_builder::sl2_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& proxies)
-    : slx_command_tree_builder(proxies)
+sl2_command_tree_builder::sl2_command_tree_builder(
+    std::shared_ptr<DBus::Connection> _connection,
+    std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies)
+    : slx_command_tree_builder(_connection, _proxies)
 {
 }
 
@@ -148,8 +161,10 @@ command_tree_builder& sl2_command_tree_builder::add_specific_commands()
     return *this;
 }
 
-sl1s_command_tree_builder::sl1s_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& proxies)
-    : slx_command_tree_builder(proxies)
+sl1s_command_tree_builder::sl1s_command_tree_builder(
+    std::shared_ptr<DBus::Connection> _connection,
+    std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies)
+    : slx_command_tree_builder(_connection, _proxies)
 {
 }
 

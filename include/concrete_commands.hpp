@@ -119,9 +119,23 @@ public:
     std::string help() override;
 };
 
+class exposure_command_base : public concrete_command_base {
+public:
+    exposure_command_base(std::string, std::shared_ptr<DBus::Connection>, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+
+    virtual ~exposure_command_base() = default;
+
+    virtual command_result execute(std::stringstream& args) = 0;
+
+protected:
+    bool set_current_exposure_object();
+
+    std::shared_ptr<DBus::Connection> _connection;
+};
+
 class start_print_command : public concrete_command_base {
 public:
-    start_print_command(std::string, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+    start_print_command(std::string, std::shared_ptr<DBus::Connection>, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
     command_result execute(std::stringstream&) override;
 
@@ -131,6 +145,54 @@ private:
     bool set_current_exposure(const std::string&);
 
     bool wait_for_state_ready();
+
+    std::shared_ptr<DBus::Connection> _connection;
+};
+
+class stop_print_command : public exposure_command_base {
+public:
+    stop_print_command(std::string, std::shared_ptr<DBus::Connection>, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+
+    command_result execute(std::stringstream&) override;
+
+private:
+    std::shared_ptr<DBus::Connection> _connection;
+};
+
+class exposure_current_layer_command : public exposure_command_base {
+public:
+    exposure_current_layer_command(std::string, std::shared_ptr<DBus::Connection>, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+
+    command_result execute(std::stringstream&) override;
+
+    std::string help() override;
+};
+
+class exposure_time_remain_command : public exposure_command_base {
+public:
+    exposure_time_remain_command(std::string, std::shared_ptr<DBus::Connection>, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+
+    command_result execute(std::stringstream&) override;
+
+    std::string help() override;
+};
+
+class exposure_progress_command : public exposure_command_base {
+public:
+    exposure_progress_command(std::string, std::shared_ptr<DBus::Connection>, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+
+    command_result execute(std::stringstream&) override;
+
+    std::string help() override;
+};
+
+class exposure_resin_used_command : public exposure_command_base {
+public:
+    exposure_resin_used_command(std::string, std::shared_ptr<DBus::Connection>, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+
+    command_result execute(std::stringstream&) override;
+
+    std::string help() override;
 };
 
 #endif

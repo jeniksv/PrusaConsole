@@ -32,7 +32,7 @@ public:
      *
      * @param proxies Map of D-Bus object proxies used by commands.
      */
-    command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& proxies);
+    command_tree_builder(std::shared_ptr<DBus::Connection> _connection, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& proxies);
 
     /**
      * @brief Virtual destructor for the command_tree_builder class.
@@ -100,6 +100,7 @@ protected:
     std::shared_ptr<composite_command> _root;
     std::shared_ptr<composite_command> _current_composite;
     std::stack<std::shared_ptr<composite_command>> _composite_stack;
+    std::shared_ptr<DBus::Connection> _connection;
     std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>& _proxies;
 };
 
@@ -124,14 +125,14 @@ public:
 
 class mock_command_tree_builder : public command_tree_builder {
 public:
-    mock_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+    mock_command_tree_builder(std::shared_ptr<DBus::Connection> _connection, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
     command_tree_builder& add_specific_commands() override;
 };
 
 class slx_command_tree_builder : public command_tree_builder {
 public:
-    slx_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+    slx_command_tree_builder(std::shared_ptr<DBus::Connection> _connection, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
     virtual ~slx_command_tree_builder() = default;
 
@@ -146,14 +147,14 @@ public:
 
 class sl2_command_tree_builder : public slx_command_tree_builder {
 public:
-    sl2_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+    sl2_command_tree_builder(std::shared_ptr<DBus::Connection> _connection, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
     command_tree_builder& add_specific_commands() override;
 };
 
 class sl1s_command_tree_builder : public slx_command_tree_builder {
 public:
-    sl1s_command_tree_builder(std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
+    sl1s_command_tree_builder(std::shared_ptr<DBus::Connection> _connection, std::map<std::string, std::shared_ptr<DBus::ObjectProxy>>&);
 
     command_tree_builder& add_specific_commands() override;
 };

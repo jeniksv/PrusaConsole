@@ -160,6 +160,10 @@ key_action_result enter_action::execute(std::string& current)
         return key_action_result::EXIT;
     }
 
+    if (result == command_result::EXPOSURE_DOES_NOT_EXIST) {
+    	Term::cout << "Exposure does not exist" << std::endl;
+    }
+
     return result == command_result::EXIT ? key_action_result::EXIT : key_action_result::CONTINUE_WITH_RESET;
 }
 

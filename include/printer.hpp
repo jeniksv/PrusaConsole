@@ -87,6 +87,7 @@ private:
 
     std::shared_ptr<DBus::Dispatcher> _dispatcher;
     std::shared_ptr<DBus::Connection> _connection;
+    // TODO create new object dbus_proxies
     std::map<std::string, std::shared_ptr<DBus::ObjectProxy>> _proxies;
 
     printer_model _type;
