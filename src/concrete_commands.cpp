@@ -430,7 +430,7 @@ bool start_print_command::wait_for_state_ready()
     auto proxy = this->_proxies.at(interface)->create_property<int>(interface, "state", DBus::PropertyAccess::ReadWrite, DBus::PropertyUpdateType::DoesNotUpdate);
 
     auto t_end = std::chrono::system_clock::now() + std::chrono::seconds(20);
-
+    
     while (std::chrono::system_clock::now() < t_end) {
         try {
             if (proxy->value() == 26) {
@@ -495,6 +495,8 @@ command_result stop_print_command::execute(std::stringstream& ss)
 
     DBus::MethodProxy<void()>& cancel_proxy = *(_proxies.at(interface)->create_method<void()>(interface, "cancel"));
     cancel_proxy();
+
+    _proxies.erase(interface);
 
     return command_result::OK;
 }

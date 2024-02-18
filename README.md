@@ -42,7 +42,7 @@ The usage is as follows:
 > help
 > tilt position set 1000
 > tilt home
-> start print /home/jeniksv/project.sl1s
+> print start /home/jeniksv/project.sl1s
 > exposure current_layer
 ```
 
