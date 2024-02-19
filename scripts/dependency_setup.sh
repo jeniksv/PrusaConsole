@@ -5,6 +5,7 @@ mkdir -p build && cd build
 # dependency not installed on ubuntu by default
 sudo apt install libpopt-dev
 sudo apt install pkg-config
+sudo apt-get install libdbus-1-dev libdbus-glib-1-dbus
 
 curl -LOJ https://github.com/dbus-cxx/dbus-cxx/archive/refs/tags/2.4.0.tar.gz && tar -xf dbus-cxx-2.4.0.tar.gz
 curl -LOJ https://download.gnome.org/sources/libsigc++/3.0/libsigc%2B%2B-3.0.0.tar.xz && tar -xf libsigc%2B%2B-3.0.0.tar.xz
