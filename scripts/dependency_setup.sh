@@ -21,3 +21,5 @@ mkdir -p dbus-cxx-2.4.0/build \
 	&& make -j16 \
 	&& sudo make install \
 	&& cd ..
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib

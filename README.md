@@ -51,7 +51,8 @@ The usage is as follows:
 For testing and development without a physical printer, set up a virtual printer. If you're using an SLx printer type, you can set it up with:
 
 ```
-./scripts/run_virtual.sh
+git clone git@gitlab.com:prusa3d/sl1/sla-fw.git
+./scripts/run_virtual.sh # script should be executed from sla-fw directory
 ```
 
 ### PrusaConsole2
