@@ -3,4 +3,4 @@
 	url = https://github.com/google/googletest.git
 [submodule "extern/cpp-terminal"]
 	path = extern/cpp-terminal
-	url = git@github.com:jupyter-xeus/cpp-terminal.git
+	url = https://github.com/jupyter-xeus/cpp-terminal.git
