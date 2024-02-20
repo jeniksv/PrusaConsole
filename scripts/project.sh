@@ -13,6 +13,7 @@ fi
 
 if [ "$1" = "--build" ]; then
     git submodule update --init --recursive
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
     mkdir -p build && cd build
     cmake .. && cmake --build . && mv prusa-console ../
 fi
