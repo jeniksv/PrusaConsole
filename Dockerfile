@@ -11,7 +11,8 @@ RUN apt-get update && \
     curl \
     libpopt-dev \
     libexpat1-dev \
-    vim
+    vim \
+    git \
 
 RUN curl -LOJ https://download.gnome.org/sources/libsigc++/3.0/libsigc%2B%2B-3.0.0.tar.xz && \
     tar -xf libsigc%2B%2B-3.0.0.tar.xz && \
@@ -30,13 +31,7 @@ RUN curl -LOJ https://github.com/dbus-cxx/dbus-cxx/archive/refs/tags/2.4.0.tar.g
     make -j16 && \
     make install && \
     cd ../..
-    #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
 WORKDIR /app
 
 COPY . /app
-
-RUN cmake .
-
-#CMD ["/app/prusa-console"]
-

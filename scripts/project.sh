@@ -8,7 +8,7 @@ fi
 if [ "$1" = "--test" ]; then
     git submodule update --init --recursive
     mkdir -p build && cd build
-    cmake .. && cmake --build . && ./tests
+    cmake .. && cmake --build . && ./tests_runner
 fi
 
 if [ "$1" = "--build" ]; then

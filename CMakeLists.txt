@@ -45,7 +45,7 @@ target_link_libraries(prusa-console prusa-console-lib)
 subdirs(extern/googletest)
 
 add_executable(
-  tests
+  tests_runner
   tests/history_tests.cpp
   tests/command_tree_tests.cpp
   tests/key_actions_tests.cpp
@@ -53,11 +53,12 @@ add_executable(
 )
 
 target_link_libraries(
-  tests
+  tests_runner
   GTest::gtest_main
   GTest::gmock_main
   prusa-console-lib
 )
 
 include(GoogleTest)
-gtest_discover_tests(tests)
+gtest_discover_tests(tests_runner)
+
